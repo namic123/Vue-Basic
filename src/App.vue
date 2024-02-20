@@ -3,10 +3,10 @@
 <!--2. script, js 코드가 들어간다. -->
 <!--3. style, css 코드가 들어간다 -->
 <template>
-  <!-- 아래 script 코드의 변수를 호출 -->
+  <!-- 아래 script 코드의 변수 및 함수 호출 -->
   <div>
     <div class="name">{{ name }}</div>
-    <div>Hi</div>
+    <div class="greeting">{{ greeting(name) }}</div>
   </div>
 </template>
 <script>
@@ -16,9 +16,12 @@
 export default {
   setup() {
     const name = "jay park";
-
+    const greeting = (name) => {
+      return "Hello" + name;
+    };
     return {
       name,
+      greeting,
     };
   },
 };
@@ -26,5 +29,8 @@ export default {
 <style>
 .name {
   color: red;
+}
+.greeting {
+  color: blue;
 }
 </style>
