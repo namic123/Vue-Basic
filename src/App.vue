@@ -48,9 +48,6 @@ export default {
     const hasError = ref(false);
 
     // method
-    function onToggle() {
-      toggle.value = !toggle.value;
-    }
     function handleTodoCompleted(todoItem) {
       todos.value.forEach((item) => {
         if (item.id === todoItem) {
@@ -76,10 +73,8 @@ export default {
     return {
       todo,
       todos,
-      toggle,
       hasError,
       handleTodoCompleted,
-      onToggle,
       onSubmit,
     };
   },
