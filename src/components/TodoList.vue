@@ -18,7 +18,7 @@
         </label>
       </div>
       <div>
-        <button class="btn btn-danger btn-sm" @click="deleteTodo(todoIndex)">
+        <button class="btn btn-danger btn-sm" @click="handleTodoDelete(todoIndex)">
           Delete
         </button>
       </div>
@@ -43,8 +43,12 @@ export default {
     function handleTodoCompleted(todoIndex) {
       context.emit('handle-todo-complete', todoIndex);
     }
+    function handleTodoDelete(todoIndex){
+      context.emit('handle-todo-delete',todoIndex);
+    }
     return {
       handleTodoCompleted,
+      handleTodoDelete,
     }
   }
 }
