@@ -8,7 +8,7 @@
     <div v-if="!todos.length">작성된 todo가 없습니다. todo를 등록해주세요.</div>
     <!-- todos 배열의 요소를 각각 출력 -->
   <!--부모 컴포넌트가 자식 컴포넌트에게 데이터를 보냄-->
-    <TodoList :todos="todos"/>
+    <TodoList :todos="todos" @handle-todo-complete="handleComplete"/>
   </div>
 </template>
 <script>
@@ -33,13 +33,8 @@ export default {
 
     // method
     // todo 완료 여부
-    function handleTodoCompleted(todoItem) {
-      todos.value.forEach((item) => {
-        if (item.id === todoItem) {
-          item.completed = !item.completed;
-          console.log(item);
-        }
-      });
+    function handleComplete(index) {
+      todos.value[index].completed = !todos.value[index].completed;
     }
     function deleteTodo(idx) {
       // pop은 마지막 요소를 삭제
@@ -55,8 +50,8 @@ export default {
       todos,
       todoStyle,
       deleteTodo,
-      handleTodoCompleted,
       addTodo,
+      handleComplete,
     };
   },
 };
