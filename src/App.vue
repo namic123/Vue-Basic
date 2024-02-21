@@ -1,11 +1,4 @@
 <template>
-  <!-- 조건문 작성 v-show vs v-if  -->
-  <!-- 공식문서 기준 v-if는 toggle시 비용이 많이 발생하고 v-show는 초기 렌더링에 비용이 많이든다. -->
-  <div v-show="toggle">v-show = true</div>
-  <div v-show="!toggle">v-show = false</div>
-  <div v-if="toggle">v-if = true</div>
-  <div v-else>v-else = false</div>
-  <button @click="onToggle">Toggle</button>
   <!-- container -->
   <div class="container">
     <h2>To-Do List</h2>
@@ -28,6 +21,7 @@
         빈 내용은 등록이 불가합니다.
       </div>
     </form>
+    <!-- todos 배열의 요소를 각각 출력 -->
     <div v-for="todoItem in todos" :key="todoItem.id" class="card mt-2">
       <div class="card-body p-2">
         <div class="form-check">
@@ -49,7 +43,6 @@ import {ref} from "vue";
 export default {
   setup() {
     // field
-    const toggle = ref(false);
     const todo = ref("");
     const todos = ref([]);
     const hasError = ref(false);
