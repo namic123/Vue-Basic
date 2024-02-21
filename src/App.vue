@@ -7,42 +7,21 @@
     <!-- todos가 비어 있는 경우 출력 -->
     <div v-if="!todos.length">작성된 todo가 없습니다. todo를 등록해주세요.</div>
     <!-- todos 배열의 요소를 각각 출력 -->
-    <div
-      v-for="(todoItem, todoIndex) in todos"
-      :key="todoItem.id"
-      class="card mt-2"
-    >
-      <div class="card-body p-2 d-flex align-items-center">
-        <div class="form-check flex-grow-1">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            v-model="todoItem.completed"
-            @click="handleTodoCompleted(todoItem.id)"
-          />
-          <!-- 해당 todo가 completed true일때만 스타일 적용 -->
-          <label class="form-check-label" :class="{todo: todoItem.completed}"
-            >{{ todoItem.subject }}
-          </label>
-        </div>
-        <div>
-          <button class="btn btn-danger btn-sm" @click="deleteTodo(todoIndex)">
-            Delete
-          </button>
-        </div>
-      </div>
-    </div>
+  <!--부모 컴포넌트가 자식 컴포넌트에게 데이터를 보냄-->
+    <TodoList :todos="todos"/>
   </div>
 </template>
 <script>
 import {ref} from "vue";
 // 다른 컴포넌트 import
 import TodoSimpleForm from "./components/TodoSimpleForm.vue";
+import TodoList from "@/components/TodoList.vue";
 
 export default {
   // 컴포넌트 등록
   components: {
     TodoSimpleForm,
+    TodoList,
   },
   setup() {
     // field
@@ -84,7 +63,7 @@ export default {
 </script>
 <style>
 .todo {
-  color: gray;
+  color:grey;
   text-decoration: line-through;
 }
 </style>
