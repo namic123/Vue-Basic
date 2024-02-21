@@ -21,6 +21,8 @@
         빈 내용은 등록이 불가합니다.
       </div>
     </form>
+    <!-- todos가 비어 있는 경우 출력 -->
+    <div v-if="!todos.length">작성된 todo가 없습니다. todo를 등록해주세요.</div>
     <!-- todos 배열의 요소를 각각 출력 -->
     <div
       v-for="(todoItem, todoIndex) in todos"
