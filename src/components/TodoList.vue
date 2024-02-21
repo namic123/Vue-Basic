@@ -38,13 +38,16 @@ export default {
       required:true
     }
   },
-  setup(props, context){
+  // Vue3의 emits 변경 사항, 위 props 처럼 배열안에 이벤트를 넣어준다.
+  // 장점 : context.emit의 중복을 피함, emit하는 이벤트를 한 눈에 볼 수 있으므로, 가독성 증가.
+  emits : ['handle-todo-complete','delete-todo'],
+  setup(props, {emit}){
     // todo 완료 여부
     function handleTodoCompleted(todoIndex) {
-      context.emit('handle-todo-complete', todoIndex);
+      emit('handle-todo-complete', todoIndex);
     }
     function handleTodoDelete(todoIndex){
-      context.emit('handle-todo-delete',todoIndex);
+      emit('handle-todo-delete',todoIndex);
     }
     return {
       handleTodoCompleted,

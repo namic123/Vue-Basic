@@ -20,8 +20,11 @@
 <script>
 import {ref} from 'vue';
 export default {
+  // Vue3의 emits 변경 사항, 배열안에 이벤트를 넣어준다.
+  // 장점 : context.emit의 중복을 피함, emit하는 이벤트를 한 눈에 볼 수 있으므로, 가독성 증가.
+  emits:['add-todo'],
   // context : 자식 컴포넌트가 부모 컴포넌트에게 데이터를 보냄. (emit()메서드를 사용)
-  setup(props, context){
+  setup(props, {emit}){
     const todo = ref("");
     const hasError = ref(false);
     // todo 등록
@@ -30,7 +33,7 @@ export default {
         hasError.value = true;
       } else {
         // 부모 컴포넌트에 데이터를 보냄.
-        context.emit('add-todo', {
+        emit('add-todo', {
           id: Date.now(),
           subject: todo.value,
           completed: false,
