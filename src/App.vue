@@ -30,7 +30,15 @@
     </form>
     <div v-for="todoItem in todos" :key="todoItem.id" class="card mt-2">
       <div class="card-body p-2">
-        {{ todoItem.subject }}
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            v-model="todoItem.completed"
+            @click="handleTodoCompleted(todoItem.id)"
+          />
+          <label class="form-check-label">{{ todoItem.subject }}</label>
+        </div>
       </div>
     </div>
   </div>
@@ -43,17 +51,21 @@ export default {
     // field
     const toggle = ref(false);
     const todo = ref("");
-    const todos = ref([
-      {id: 1, subject: "휴대폰 사기"},
-      {id: 2, subject: "장보기"},
-    ]);
+    const todos = ref([]);
     const hasError = ref(false);
 
     // method
     function onToggle() {
       toggle.value = !toggle.value;
     }
-
+    function handleTodoCompleted(todoItem) {
+      todos.value.forEach((item) => {
+        if (item.id === todoItem) {
+          item.completed = !item.completed;
+          console.log(item);
+        }
+      });
+    }
     function onSubmit() {
       if (todo.value.length <= 0) {
         hasError.value = true;
@@ -62,7 +74,9 @@ export default {
         todos.value.push({
           id: Date.now(),
           subject: todo.value,
+          completed: false,
         });
+        todo.value = "";
       }
     }
 
@@ -71,6 +85,7 @@ export default {
       todos,
       toggle,
       hasError,
+      handleTodoCompleted,
       onToggle,
       onSubmit,
     };
