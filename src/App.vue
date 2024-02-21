@@ -5,11 +5,16 @@
 <template>
   <!-- 아래 script 코드의 변수 및 함수 호출 -->
   <div>
-    <div class="name">{{ name }}</div>
     <!-- 데이터 바인딩(데이터 간 연결) 예시 -->
-    <!-- 모든 태그의 속성(attribute)에 데이터 바인딩이 가능 -->
-    <input v-bind:type="type" v-bind:value="name" />
-    <button class="btn btn-primary" v-on:click="updateName">Click</button>
+    <!-- 모든 태그의 속성(attribute)에 데이터 바인딩이 가능(선택자 속성도 포함) -->
+    <!-- v-bind는 생략이 가능하다 v-bind: = : -->
+    <div :class="changeClass">{{ name }}</div>
+    <input :type="type" :value="name" />
+    <!-- v-on:click 도 @click으로 생략 가능 -->
+    <button 
+    class="btn btn-primary" 
+    @click="updateName"
+    >Click</button>
   </div>
 </template>
 <script>
@@ -20,14 +25,17 @@ export default {
     // ref
     let name = ref("Jay park(ref)");
     let type = ref("text");
+    let changeClass = ref("name");
 
     function updateName() {
       name.value = "changed to jay by ref!";
       type.value = "number";
+      changeClass.value = "changeName";
     }
     return {
       name,
       type,
+      changeClass,
       updateName,
     };
   },
@@ -36,6 +44,9 @@ export default {
 <style>
 .name {
   color: red;
+}
+.changeName {
+  color: green;
 }
 .greeting {
   color: blue;
