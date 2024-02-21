@@ -31,7 +31,12 @@
             v-model="todoItem.completed"
             @click="handleTodoCompleted(todoItem.id)"
           />
-          <label class="form-check-label">{{ todoItem.subject }}</label>
+          <!-- 해당 todo가 completed true일때만 스타일 적용 -->
+          <label
+            class="form-check-label"
+            :style="todoItem.completed ? todoStyle : {}"
+            >{{ todoItem.subject }}</label
+          >
         </div>
       </div>
     </div>
@@ -46,6 +51,10 @@ export default {
     const todo = ref("");
     const todos = ref([]);
     const hasError = ref(false);
+    const todoStyle = {
+      textDecoration: "line-through",
+      color: "gray",
+    };
 
     // method
     function handleTodoCompleted(todoItem) {
@@ -74,6 +83,7 @@ export default {
       todo,
       todos,
       hasError,
+      todoStyle,
       handleTodoCompleted,
       onSubmit,
     };
