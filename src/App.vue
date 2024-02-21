@@ -22,9 +22,13 @@
       </div>
     </form>
     <!-- todos 배열의 요소를 각각 출력 -->
-    <div v-for="todoItem in todos" :key="todoItem.id" class="card mt-2">
-      <div class="card-body p-2">
-        <div class="form-check">
+    <div
+      v-for="(todoItem, todoIndex) in todos"
+      :key="todoItem.id"
+      class="card mt-2"
+    >
+      <div class="card-body p-2 d-flex align-items-center">
+        <div class="form-check flex-grow-1">
           <input
             class="form-check-input"
             type="checkbox"
@@ -35,6 +39,11 @@
           <label class="form-check-label" :class="{todo: todoItem.completed}">{{
             todoItem.subject
           }}</label>
+        </div>
+        <div>
+          <button class="btn btn-danger btn-sm" @click="deleteTodo(todoIndex)">
+            Delete
+          </button>
         </div>
       </div>
     </div>
@@ -55,6 +64,7 @@ export default {
     };
 
     // method
+    // todo 완료 여부
     function handleTodoCompleted(todoItem) {
       todos.value.forEach((item) => {
         if (item.id === todoItem) {
@@ -63,6 +73,13 @@ export default {
         }
       });
     }
+    function deleteTodo(idx) {
+      // pop은 마지막 요소를 삭제
+      // todos.value.pop();
+      // splice(인덱스, 개수)
+      todos.value.splice(idx, 1);
+    }
+    // todo 등록
     function onSubmit() {
       if (todo.value.length <= 0) {
         hasError.value = true;
@@ -82,6 +99,7 @@ export default {
       todos,
       hasError,
       todoStyle,
+      deleteTodo,
       handleTodoCompleted,
       onSubmit,
     };
