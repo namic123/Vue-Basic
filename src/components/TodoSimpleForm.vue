@@ -18,7 +18,34 @@
   </form>
 </template>
 <script>
-export default {};
+import {ref} from 'vue';
+export default {
+  // context : 자식 컴포넌트가 부모 컴포넌트에게 데이터를 보냄. (emit()메서드를 사용)
+  setup(props, context){
+    const todo = ref("");
+    const hasError = ref(false);
+    // todo 등록
+    function onSubmit() {
+      if (todo.value.length <= 0) {
+        hasError.value = true;
+      } else {
+        // 부모 컴포넌트에 데이터를 보냄.
+        context.emit('add-todo', {
+          id: Date.now(),
+          subject: todo.value,
+          completed: false,
+        });
+        hasError.value = false;
+        todo.value = "";
+      }
+    }
+    return{
+    todo,
+    hasError,
+      onSubmit,
+  }
+  }
+};
 </script>
 
 <style></style>

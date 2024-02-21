@@ -2,7 +2,8 @@
   <!-- container -->
   <div class="container">
     <h2>To-Do List</h2>
-    <TodoSimpleForm />
+<!-- 자식 컴포넌트에서 데이터를 보내고 addTodo 메서드 실행-->
+    <TodoSimpleForm @add-todo="addTodo"/>
     <!-- todos가 비어 있는 경우 출력 -->
     <div v-if="!todos.length">작성된 todo가 없습니다. todo를 등록해주세요.</div>
     <!-- todos 배열의 요소를 각각 출력 -->
@@ -45,9 +46,7 @@ export default {
   },
   setup() {
     // field
-    const todo = ref("");
     const todos = ref([]);
-    const hasError = ref(false);
     const todoStyle = {
       textDecoration: "line-through",
       color: "gray",
@@ -69,29 +68,16 @@ export default {
       // splice(인덱스, 개수)
       todos.value.splice(idx, 1);
     }
-    // todo 등록
-    function onSubmit() {
-      if (todo.value.length <= 0) {
-        hasError.value = true;
-      } else {
-        hasError.value = false;
-        todos.value.push({
-          id: Date.now(),
-          subject: todo.value,
-          completed: false,
-        });
-        todo.value = "";
-      }
-    }
 
+    function addTodo(todo){
+      todos.value.push(todo);
+    }
     return {
-      todo,
       todos,
-      hasError,
       todoStyle,
       deleteTodo,
       handleTodoCompleted,
-      onSubmit,
+      addTodo,
     };
   },
 };
