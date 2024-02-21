@@ -2,25 +2,7 @@
   <!-- container -->
   <div class="container">
     <h2>To-Do List</h2>
-    <!-- @submit.prevent = event.preventDefault -->
-    <form @submit.prevent="onSubmit">
-      <div class="d-flex">
-        <div class="flex-grow-1 mr-2">
-          <input
-            class="form-control"
-            type="text"
-            v-model="todo"
-            placeholder="Type new to-do"
-          />
-        </div>
-        <div>
-          <button type="submit" class="btn btn-primary">Add</button>
-        </div>
-      </div>
-      <div v-show="hasError" style="color: red">
-        빈 내용은 등록이 불가합니다.
-      </div>
-    </form>
+    <TodoSimpleForm />
     <!-- todos가 비어 있는 경우 출력 -->
     <div v-if="!todos.length">작성된 todo가 없습니다. todo를 등록해주세요.</div>
     <!-- todos 배열의 요소를 각각 출력 -->
@@ -38,9 +20,9 @@
             @click="handleTodoCompleted(todoItem.id)"
           />
           <!-- 해당 todo가 completed true일때만 스타일 적용 -->
-          <label class="form-check-label" :class="{todo: todoItem.completed}">{{
-            todoItem.subject
-          }}</label>
+          <label class="form-check-label" :class="{todo: todoItem.completed}"
+            >{{ todoItem.subject }}
+          </label>
         </div>
         <div>
           <button class="btn btn-danger btn-sm" @click="deleteTodo(todoIndex)">
@@ -53,8 +35,14 @@
 </template>
 <script>
 import {ref} from "vue";
+// 다른 컴포넌트 import
+import TodoSimpleForm from "./components/TodoSimpleForm.vue";
 
 export default {
+  // 컴포넌트 등록
+  components: {
+    TodoSimpleForm,
+  },
   setup() {
     // field
     const todo = ref("");
