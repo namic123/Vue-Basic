@@ -1,6 +1,8 @@
 <template>
   <div>
-    <input :type="type" :value="name" @input="updateName" />
+    <!-- <input :type="type" :value="name" @input="updateName" /> -->
+    <!-- v-model 지시어를 사용하면 위와 같은 기능을 동일하게 동작할 수 있음 -->
+    <input type="text" v-model="name"/> 
     <button class="btn btn-primary" @click="onSubmit">Click</button>
   </div>
 </template>
