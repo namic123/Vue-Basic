@@ -32,11 +32,9 @@
             @click="handleTodoCompleted(todoItem.id)"
           />
           <!-- 해당 todo가 completed true일때만 스타일 적용 -->
-          <label
-            class="form-check-label"
-            :style="todoItem.completed ? todoStyle : {}"
-            >{{ todoItem.subject }}</label
-          >
+          <label class="form-check-label" :class="{todo: todoItem.completed}">{{
+            todoItem.subject
+          }}</label>
         </div>
       </div>
     </div>
@@ -90,4 +88,9 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+.todo {
+  color: gray;
+  text-decoration: line-through;
+}
+</style>
