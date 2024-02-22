@@ -12,7 +12,7 @@
     <!-- 자식 컴포넌트에서 데이터를 보내고 addTodo 메서드 실행-->
     <TodoSimpleForm @add-todo="addTodo" />
     <!-- 응답 error 출력   -->
-    <div style="color:red">{{error}}}</div>
+    <div style="color: red">{{ error }}}</div>
     <!-- todos가 비어 있는 경우 출력 -->
     <div v-if="!filteredTodos.length">확인된 todo가 없습니다.</div>
     <!-- todos 배열의 요소를 각각 출력 -->
@@ -58,21 +58,34 @@ export default {
       // splice(인덱스, 개수)
       todos.value.splice(index, 1);
     }
-
-    function addTodo(todo) {
+    // async : 함수 앞에 사용되는 키워드로, 해당 함수가 비동기 함수임을 나타낸다.
+    // async 함수는 항상 프로미스를 반환하므로, 비동기 작업을 수행하는 함수를 선언할 떄 사용
+    // await : 비동기 작업의 완료를 기다리는 키워드.
+    // await는 async 함수 내에서만 사용할 수 있으며, 프로미스의 결과를 기다리는 동안 함수의 실행을 일시적으로 중지
+    async function addTodo(todo) {
       // Database에 todo를 저장
       // id는 autoIncreament로 저장됨.
-      error.value = '';
-      axios.post('http://localhost:3000/todos',{
-        subject:todo.subject,
-        completed:todo.completed,
-      }).then((res)=>{
-        console.log(res);
+      error.value = "";
+      try {
+        // await 키워드가 선언되었으므로, axios요청이 끝날 때까지 다음 코드가 실행되지 않는다.
+        const res = await axios.post("http://localhost:3000/todos", {
+          subject: todo.subject,
+          completed: todo.completed,
+        });
+        // 위 axios 요청에 await이 선언되었으므로, 요청 끝나고 todos에 push가 실행됨
         todos.value.push(res.data);
-      }).catch((err)=>{
+      } catch (err) {
+        // 아래 axios 코드와 동일하게 동작 try-catch
         console.log(err);
-        error.value = 'Something went wrong.';
-      });
+        error.value = "Something went wrong.";
+      }
+      // }).then((res)=>{
+      //   console.log(res);
+      //   todos.value.push(res.data);
+      // }).catch((err)=>{
+      //   console.log(err);
+      //   error.value = 'Something went wrong.';
+      // });
     }
     // 검색 로직 메서드
     const filteredTodos = computed(() => {
