@@ -34,7 +34,6 @@ export default {
       } else {
         // 부모 컴포넌트에 데이터를 보냄.
         emit('add-todo', {
-          id: Date.now(),
           subject: todo.value,
           completed: false,
         });

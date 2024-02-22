@@ -11,6 +11,8 @@
     <hr />
     <!-- 자식 컴포넌트에서 데이터를 보내고 addTodo 메서드 실행-->
     <TodoSimpleForm @add-todo="addTodo" />
+    <!-- 응답 error 출력   -->
+    <div style="color:red">{{error}}}</div>
     <!-- todos가 비어 있는 경우 출력 -->
     <div v-if="!filteredTodos.length">확인된 todo가 없습니다.</div>
     <!-- todos 배열의 요소를 각각 출력 -->
@@ -27,6 +29,7 @@ import {ref, computed} from "vue";
 // 다른 컴포넌트 import
 import TodoSimpleForm from "./components/TodoSimpleForm.vue";
 import TodoList from "@/components/TodoList.vue";
+import axios from "axios";
 
 export default {
   // 컴포넌트 등록
@@ -42,18 +45,8 @@ export default {
       color: "gray",
     };
     const searchText = ref("");
-    // 검색 로직 메서드
-    const filteredTodos = computed(() => {
-      // searchText가 빈문자열이 아닐때
-      if (searchText.value) {
-        // todos 배열 요소를 각각 꺼내서 filtering
-        return todos.value.filter((todo) => {
-          // 배열의 요소가 searchText가 포함된 것만 리턴
-          return todo.subject.includes(searchText.value);
-        });
-      }
-      return todos.value;
-    });
+    const error = ref("");
+
     // method
     // todo 완료 여부
     function handleComplete(index) {
@@ -67,12 +60,36 @@ export default {
     }
 
     function addTodo(todo) {
-      todos.value.push(todo);
+      // Database에 todo를 저장
+      // id는 autoIncreament로 저장됨.
+      error.value = '';
+      axios.post('http://localhost:3000/todos',{
+        subject:todo.subject,
+        completed:todo.completed,
+      }).then((res)=>{
+        console.log(res);
+        todos.value.push(res.data);
+      }).catch((err)=>{
+        console.log(err);
+        error.value = 'Something went wrong.';
+      });
     }
-
+    // 검색 로직 메서드
+    const filteredTodos = computed(() => {
+      // searchText가 빈문자열이 아닐때
+      if (searchText.value) {
+        // todos 배열 요소를 각각 꺼내서 filtering
+        return todos.value.filter((todo) => {
+          // 배열의 요소가 searchText가 포함된 것만 리턴
+          return todo.subject.includes(searchText.value);
+        });
+      }
+      return todos.value;
+    });
     return {
       todos,
       todoStyle,
+      error,
       deleteTodo,
       addTodo,
       handleComplete,
