@@ -58,13 +58,8 @@ export default {
       // splice(인덱스, 개수)
       todos.value.splice(index, 1);
     }
-    // async : 함수 앞에 사용되는 키워드로, 해당 함수가 비동기 함수임을 나타낸다.
-    // async 함수는 항상 프로미스를 반환하므로, 비동기 작업을 수행하는 함수를 선언할 떄 사용
-    // await : 비동기 작업의 완료를 기다리는 키워드.
-    // await는 async 함수 내에서만 사용할 수 있으며, 프로미스의 결과를 기다리는 동안 함수의 실행을 일시적으로 중지
+    // todo 입력 async(비동기 함수 선언)
     async function addTodo(todo) {
-      // Database에 todo를 저장
-      // id는 autoIncreament로 저장됨.
       error.value = "";
       try {
         // await 키워드가 선언되었으므로, axios요청이 끝날 때까지 다음 코드가 실행되지 않는다.
@@ -79,14 +74,8 @@ export default {
         console.log(err);
         error.value = "Something went wrong.";
       }
-      // }).then((res)=>{
-      //   console.log(res);
-      //   todos.value.push(res.data);
-      // }).catch((err)=>{
-      //   console.log(err);
-      //   error.value = 'Something went wrong.';
-      // });
     }
+    
     // 검색 로직 메서드
     const filteredTodos = computed(() => {
       // searchText가 빈문자열이 아닐때
