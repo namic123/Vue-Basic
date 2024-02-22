@@ -12,7 +12,7 @@
     <!-- 자식 컴포넌트에서 데이터를 보내고 addTodo 메서드 실행-->
     <TodoSimpleForm @add-todo="addTodo" />
     <!-- 응답 error 출력   -->
-    <div style="color: red">{{ error }}}</div>
+    <div style="color: red">{{ error }}</div>
     <!-- todos가 비어 있는 경우 출력 -->
     <div v-if="!filteredTodos.length">확인된 todo가 없습니다.</div>
     <!-- todos 배열의 요소를 각각 출력 -->
@@ -58,6 +58,17 @@ export default {
       // splice(인덱스, 개수)
       todos.value.splice(index, 1);
     }
+    // db에서 todos 데이터 가져오기
+    const getTodos = async() =>{
+      try {
+        const res = await axios.get("http://localhost:3000/todos");
+        todos.value = res.data;
+      }catch (err) {
+        console.log(err);
+        error.value = "Something went wrong.";
+      }
+      };
+    getTodos();
     // todo 입력 async(비동기 함수 선언)
     async function addTodo(todo) {
       error.value = "";
@@ -75,7 +86,7 @@ export default {
         error.value = "Something went wrong.";
       }
     }
-    
+
     // 검색 로직 메서드
     const filteredTodos = computed(() => {
       // searchText가 빈문자열이 아닐때
