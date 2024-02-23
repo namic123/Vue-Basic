@@ -1,11 +1,6 @@
 {
   "todos": [
     {
-      "id": "eb90",
-      "subject": "test1",
-      "completed": false
-    },
-    {
       "id": "a1cf",
       "subject": "test2",
       "completed": false
