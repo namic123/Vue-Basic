@@ -26,7 +26,11 @@
     <nav aria-label="Page navigation example">
       <ul class="pagination">
         <li v-if="currentPage !== 1" class="page-item">
-          <a class="page-link" href="#">
+          <a
+            style="cursor: pointer"
+            class="page-link"
+            @click="getTodos(currentPage - 1)"
+          >
             Previous
           </a>
         </li>
@@ -36,16 +40,23 @@
           v-for="page in numberOfPages"
           :key="page"
           class="page-item"
-          :class="currentPage === page? 'active': ''"
-          >
-          <a class="page-link" href="#">
-            {{page}}
+          :class="currentPage === page ? 'active' : ''"
+        >
+          <a style="cursor: pointer" class="page-link" @click="getTodos(page)">
+            {{ page }}
           </a>
         </li>
-        <li v-if="currentPage !== numberOfPages" class="page-item"><a class="page-link" href="#">Next</a></li>
+        <li v-if="currentPage !== numberOfPages" class="page-item">
+          <a
+            style="cursor: pointer"
+            class="page-link"
+            @click="getTodos(currentPage + 1)"
+          >
+            Next
+          </a>
+        </li>
       </ul>
     </nav>
-
   </div>
 </template>
 <script>
@@ -79,9 +90,9 @@ export default {
     const currentPage = ref(1);
     // 총 페이지 수
     // todo 개수 11/5 = 2.1 -> 올림(ceil) -> 3
-    const numberOfPages = computed(()=>{
-      return Math.ceil(numberOfTodos.value/limit);
-    })
+    const numberOfPages = computed(() => {
+      return Math.ceil(numberOfTodos.value / limit);
+    });
 
     // method
     // todo 완료 여부
@@ -112,14 +123,15 @@ export default {
       }
     }
     // db에서 todos 데이터 가져오기
-    const getTodos = async () => {
+    const getTodos = async (page = currentPage.value) => {
+      currentPage.value = page;
       try {
         const res = await axios.get(
-          `http://localhost:3000/todos?_page=${currentPage.value}&_limit=${limit}`
+          `http://localhost:3000/todos?_page=${page}&_limit=${limit}`
         );
         // res.headers["x-total-count"] : 데이터의 총 개수. 즉, todos의 개수
         // 버전 문제가 있을 수 있음 : npm install -g json-server@0.17.0
-        numberOfTodos.value = res.headers['x-total-count'];
+        numberOfTodos.value = res.headers["x-total-count"];
         todos.value = res.data;
       } catch (err) {
         console.log(err);
@@ -168,6 +180,7 @@ export default {
       filteredTodos,
       numberOfPages,
       currentPage,
+      getTodos,
     };
   },
 };
