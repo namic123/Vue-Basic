@@ -23,40 +23,11 @@
       @handle-todo-delete="deleteTodo"
     />
     <hr />
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li v-if="currentPage !== 1" class="page-item">
-          <a
-            style="cursor: pointer"
-            class="page-link"
-            @click="getTodos(currentPage - 1)"
-          >
-            Previous
-          </a>
-        </li>
-        <!--페이지 번호 반복하기-->
-        <!-- 현재 페이지 active -->
-        <li
-          v-for="page in numberOfPages"
-          :key="page"
-          class="page-item"
-          :class="currentPage === page ? 'active' : ''"
-        >
-          <a style="cursor: pointer" class="page-link" @click="getTodos(page)">
-            {{ page }}
-          </a>
-        </li>
-        <li v-if="currentPage !== numberOfPages" class="page-item">
-          <a
-            style="cursor: pointer"
-            class="page-link"
-            @click="getTodos(currentPage + 1)"
-          >
-            Next
-          </a>
-        </li>
-      </ul>
-    </nav>
+    <!-- 페이지네이션 -->
+    <TodoPagination
+      @get-todos="setTodoList"
+      @get-todos-error='getTodoError'
+    />
   </div>
 </template>
 <script>
@@ -64,6 +35,7 @@ import {ref, computed} from "vue";
 // 다른 컴포넌트 import
 import TodoSimpleForm from "./components/TodoSimpleForm.vue";
 import TodoList from "@/components/TodoList.vue";
+import TodoPagination from "@/components/TodoPagination.vue"
 import axios from "axios";
 
 export default {
@@ -71,6 +43,7 @@ export default {
   components: {
     TodoSimpleForm,
     TodoList,
+    TodoPagination,
   },
   setup() {
     // field
@@ -81,18 +54,6 @@ export default {
     };
     const searchText = ref("");
     const error = ref("");
-    // 페이지네이션
-    // todo 총 개수
-    const numberOfTodos = ref(0);
-    // 페이지당 보여줄 todo
-    const limit = 5;
-    // 현재 페이지 번호
-    const currentPage = ref(1);
-    // 총 페이지 수
-    // todo 개수 11/5 = 2.1 -> 올림(ceil) -> 3
-    const numberOfPages = computed(() => {
-      return Math.ceil(numberOfTodos.value / limit);
-    });
 
     // method
     // todo 완료 여부
@@ -122,23 +83,7 @@ export default {
         error.value = "Something went wrong.";
       }
     }
-    // db에서 todos 데이터 가져오기
-    const getTodos = async (page = currentPage.value) => {
-      currentPage.value = page;
-      try {
-        const res = await axios.get(
-          `http://localhost:3000/todos?_page=${page}&_limit=${limit}`
-        );
-        // res.headers["x-total-count"] : 데이터의 총 개수. 즉, todos의 개수
-        // 버전 문제가 있을 수 있음 : npm install -g json-server@0.17.0
-        numberOfTodos.value = res.headers["x-total-count"];
-        todos.value = res.data;
-      } catch (err) {
-        console.log(err);
-        error.value = "Something went wrong.";
-      }
-    };
-    getTodos();
+
     // todo 입력 async(비동기 함수 선언)
     async function addTodo(todo) {
       error.value = "";
@@ -156,7 +101,13 @@ export default {
         error.value = "Something went wrong.";
       }
     }
-
+    // Todo 가져오기 (페이지네이션)
+    function setTodoList(data){
+      todos.value = data;
+    }
+    function setTodoError(data){
+      error.value = data;
+    }
     // 검색 로직 메서드
     const filteredTodos = computed(() => {
       // searchText가 빈문자열이 아닐때
@@ -178,9 +129,8 @@ export default {
       handleComplete,
       searchText,
       filteredTodos,
-      numberOfPages,
-      currentPage,
-      getTodos,
+      setTodoList,
+      setTodoError,
     };
   },
 };

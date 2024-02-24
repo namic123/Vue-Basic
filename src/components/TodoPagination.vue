@@ -1,0 +1,88 @@
+<template>
+<!-- 페이징  -->
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li v-if="currentPage !== 1" class="page-item">
+        <a
+          style="cursor: pointer"
+          class="page-link"
+          @click="getTodos(currentPage - 1)"
+        >
+          Previous
+        </a>
+      </li>
+      <!--페이지 번호 반복하기-->
+      <!-- 현재 페이지 active -->
+      <li
+        v-for="page in numberOfPages"
+        :key="page"
+        class="page-item"
+        :class="currentPage === page ? 'active' : ''"
+      >
+        <a style="cursor: pointer" class="page-link" @click="getTodos(page)">
+          {{ page }}
+        </a>
+      </li>
+      <li v-if="currentPage !== numberOfPages" class="page-item">
+        <a
+          style="cursor: pointer"
+          class="page-link"
+          @click="getTodos(currentPage + 1)"
+        >
+          Next
+        </a>
+      </li>
+    </ul>
+  </nav>
+</template>
+
+<script>
+import {computed, ref} from 'vue';
+import axios from 'axios';
+
+export default {
+    setup(props,{emit}){
+      // 페이지네이션
+      // 현재 페이지 번호
+      const currentPage = ref(1);
+      // 페이지당 보여줄 todo
+      const limit = 5;
+      // todo 총 개수
+      const numberOfTodos = ref(0);
+      // 총 페이지 수
+      // todo 개수 11/5 = 2.1 -> 올림(ceil) -> 3
+      const numberOfPages = computed(() => {
+        return Math.ceil(numberOfTodos.value / limit);
+      });
+
+      // db에서 todos 데이터 가져오기
+      const getTodos = async (page = currentPage.value) => {
+        currentPage.value = page;
+        try {
+          const res = await axios.get(
+            `http://localhost:3000/todos?_page=${page}&_limit=${limit}`
+          );
+          // res.headers["x-total-count"] : 데이터의 총 개수. 즉, todos의 개수
+          // 버전 문제가 있을 수 있음 : npm install -g json-server@0.17.0
+          numberOfTodos.value = res.headers["x-total-count"];
+          emit("get-todos", res.data);
+
+        } catch (err) {
+          console.log(err);
+          emit("get-todos-error", "Something went wrong.");
+        }
+      };
+      getTodos();
+      return{
+        numberOfPages,
+        currentPage,
+        getTodos,
+      }
+    }
+  }
+</script>
+
+
+<style scoped>
+
+</style>
