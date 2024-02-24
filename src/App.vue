@@ -25,13 +25,27 @@
     <hr />
     <nav aria-label="Page navigation example">
       <ul class="pagination">
-        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        <li v-if="currentPage !== 1" class="page-item">
+          <a class="page-link" href="#">
+            Previous
+          </a>
+        </li>
+        <!--페이지 번호 반복하기-->
+        <!-- 현재 페이지 active -->
+        <li
+          v-for="page in numberOfPages"
+          :key="page"
+          class="page-item"
+          :class="currentPage === page? 'active': ''"
+          >
+          <a class="page-link" href="#">
+            {{page}}
+          </a>
+        </li>
+        <li v-if="currentPage !== numberOfPages" class="page-item"><a class="page-link" href="#">Next</a></li>
       </ul>
     </nav>
+
   </div>
 </template>
 <script>
@@ -57,10 +71,17 @@ export default {
     const searchText = ref("");
     const error = ref("");
     // 페이지네이션
-    const totalPage = ref(0);
+    // todo 총 개수
+    const numberOfTodos = ref(0);
+    // 페이지당 보여줄 todo
     const limit = 5;
-    const page = ref(1);
-
+    // 현재 페이지 번호
+    const currentPage = ref(1);
+    // 총 페이지 수
+    // todo 개수 11/5 = 2.1 -> 올림(ceil) -> 3
+    const numberOfPages = computed(()=>{
+      return Math.ceil(numberOfTodos.value/limit);
+    })
 
     // method
     // todo 완료 여부
@@ -94,11 +115,11 @@ export default {
     const getTodos = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/todos?_page=${page.value}&_limit=${limit}`
+          `http://localhost:3000/todos?_page=${currentPage.value}&_limit=${limit}`
         );
         // res.headers["x-total-count"] : 데이터의 총 개수. 즉, todos의 개수
         // 버전 문제가 있을 수 있음 : npm install -g json-server@0.17.0
-        totalPage.value = res.headers['x-total-count'];
+        numberOfTodos.value = res.headers['x-total-count'];
         todos.value = res.data;
       } catch (err) {
         console.log(err);
@@ -145,6 +166,8 @@ export default {
       handleComplete,
       searchText,
       filteredTodos,
+      numberOfPages,
+      currentPage,
     };
   },
 };
