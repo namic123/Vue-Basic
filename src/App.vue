@@ -31,7 +31,7 @@
   </div>
 </template>
 <script>
-import {ref, computed} from 'vue';
+import {ref, computed, watch} from 'vue';
 // 다른 컴포넌트 import
 import TodoSimpleForm from "./components/TodoSimpleForm.vue";
 import TodoList from "@/components/TodoList.vue";
@@ -54,7 +54,21 @@ export default {
     };
     const searchText = ref("");
     const error = ref("");
+    const a = ref(1);
 
+    // 명시적으로 감시할 특정 소스를 지정해야함.(reactive state(반응형 참조), 반응형 객체의속성 등)
+    // 소스의 이전 값과 현재 값을 콜백 함수로 받을 수 있으며, 주로 특정 데이터의 변경을 정확하게 감시하고자 할 때 사용.
+    // watchEffect와의 차이점
+    // 1. watch는 명시적으로 감시할 대상 지정, watchEffect는 콜백 함수 내에서 접근한 모든 반응형 상태를 자동 감지
+    // 2. watch는 보다 세밀한 제어 옵션(예: 이전 값과 현재 값의 비교, 지연 실행 등)을 제공,
+    // 반면, watchEffect는 사용의 편의성을 제공하지만 그만큼 제어 옵션이 제한적
+    // 3. watchEffect는 정의되자마자 즉시 실행되며, 의존성이 변경될 때마다 재실행, watch는 감시 대상의 변경 시에만 콜백 함수가 실행
+    watch(a,(a, prev)=>{
+      // 1번 인자에는 현재 상태, 2번 인자에는 이전 상태
+      console.log(a, prev); // 2, 1 출력
+    })
+
+    a.value = 2;
 
     // method
     // todo 완료 여부
