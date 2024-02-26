@@ -70,7 +70,7 @@ export default {
     // 3. watchEffect는 정의되자마자 즉시 실행되며, 의존성이 변경될 때마다 재실행, watch는 감시 대상의 변경 시에만 콜백 함수가 실행
     watch(() => [a.b, a.c],(current, prev)=>{
       // 1번 인자에는 현재 상태, 2번 인자에는 이전 상태
-      console.log(current, prev); // [3, 4] -> [1, 3] 출력
+      console.log(current, prev); // [2, 3] -> [1, 3] 출력
     });
   watch([x, z],(current, prev)=>{
     console.log("ref 사용 -> ", current, prev);
