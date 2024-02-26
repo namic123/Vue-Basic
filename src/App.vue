@@ -79,7 +79,9 @@ export default {
       try {
         await axios.delete("http://localhost:3000/todos/" + id);
 
-        todos.value.splice(index, 1);
+        if(getTodoRef.value){
+          getTodoRef.value.getTodos(1);
+        }
       } catch (err) {
         console.log(err);
         error.value = "Something went wrong.";
