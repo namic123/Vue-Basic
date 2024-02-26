@@ -14,24 +14,25 @@
     <!-- 응답 error 출력   -->
     <div style="color: red">{{ error }}</div>
     <!-- todos가 비어 있는 경우 출력 -->
-    <div v-if="!filteredTodos.length">확인된 todo가 없습니다.</div>
+    <div v-if="!todos.length">확인된 todo가 없습니다.</div>
     <!-- todos 배열의 요소를 각각 출력 -->
     <!--부모 컴포넌트가 자식 컴포넌트에게 데이터를 보냄-->
     <TodoList
-      :todos="filteredTodos"
+      :todos="todos"
       @handle-todo-complete="handleComplete"
       @handle-todo-delete="deleteTodo"
     />
     <hr />
     <!-- 페이지네이션 -->
     <TodoPagination
+      :searchText='searchText'
       @get-todos="setTodoList"
-      @get-todos-error='getTodoError'
+      @get-todos-error='setTodoError'
     />
   </div>
 </template>
 <script>
-import {ref, computed, watch, reactive} from 'vue';
+import {ref} from 'vue';
 // 다른 컴포넌트 import
 import TodoSimpleForm from "./components/TodoSimpleForm.vue";
 import TodoList from "@/components/TodoList.vue";
@@ -108,6 +109,7 @@ export default {
     function setTodoError(data){
       error.value = data;
     }
+
     // // 검색 로직 메서드
     // const filteredTodos = computed(() => {
     //   // searchText가 빈문자열이 아닐때

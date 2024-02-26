@@ -37,10 +37,17 @@
 </template>
 
 <script>
-import {computed, ref} from 'vue';
+import {computed, ref, watch} from 'vue';
 import axios from 'axios';
 
 export default {
+  props: {
+    // 부모 컴포넌트에게 받은 prop의 타입을 명시하여 일관성 보장
+    searchText: {
+      type: String,
+      required: true,
+    },
+  },
     setup(props,{emit}){
       // 페이지네이션
       // 현재 페이지 번호
@@ -60,7 +67,7 @@ export default {
         currentPage.value = page;
         try {
           const res = await axios.get(
-            `http://localhost:3000/todos?_page=${page}&_limit=${limit}`
+            `http://localhost:3000/todos?subject_like=${props.searchText}&_page=${page}&_limit=${limit}`
           );
           // res.headers["x-total-count"] : 데이터의 총 개수. 즉, todos의 개수
           // 버전 문제가 있을 수 있음 : npm install -g json-server@0.17.0
@@ -73,6 +80,11 @@ export default {
         }
       };
       getTodos();
+
+      // props를 watch하기 위해서는 콜백 함수 ()=>를 이용하여 현재 값을 가져와야 한다.
+      watch(()=> props.searchText,()=>{
+        getTodos(1);
+      });
       return{
         numberOfPages,
         currentPage,
