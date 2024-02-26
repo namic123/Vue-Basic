@@ -135,7 +135,6 @@ export default {
       // filteredTodos,
       setTodoList,
       setTodoError,
-      getTodoRef,
     };
   },
 };
