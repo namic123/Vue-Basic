@@ -26,8 +26,9 @@
     <!-- 페이지네이션 -->
     <TodoPagination
       :searchText='searchText'
-      @get-todos="setTodoList"
+      @set-todos="setTodoList"
       @get-todos-error='setTodoError'
+      ref='getTodoRef'
     />
   </div>
 </template>
@@ -55,7 +56,7 @@ export default {
     };
     const searchText = ref("");
     const error = ref("");
-
+    const getTodoRef = ref(null);
     // method
     // todo 완료 여부
     async function handleComplete(index) {
@@ -90,12 +91,13 @@ export default {
       error.value = "";
       try {
         // await 키워드가 선언되었으므로, axios요청이 끝날 때까지 다음 코드가 실행되지 않는다.
-        const res = await axios.post("http://localhost:3000/todos", {
+        await axios.post("http://localhost:3000/todos", {
           subject: todo.subject,
           completed: todo.completed,
         });
-        // 위 axios 요청에 await이 선언되었으므로, 요청 끝나고 todos에 push가 실행됨
-        todos.value.push(res.data);
+        if(getTodoRef.value){
+        getTodoRef.value.getTodos(1);
+          }
       } catch (err) {
         // 아래 axios 코드와 동일하게 동작 try-catch
         console.log(err);
@@ -133,6 +135,7 @@ export default {
       // filteredTodos,
       setTodoList,
       setTodoError,
+      getTodoRef,
     };
   },
 };

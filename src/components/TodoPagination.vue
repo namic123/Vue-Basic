@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import {computed, ref, watch} from 'vue';
+import {computed, ref, watch, defineExpose} from 'vue';
 import axios from 'axios';
 
 export default {
@@ -48,6 +48,7 @@ export default {
       required: true,
     },
   },
+  emits: ["set-todos"],
     setup(props,{emit}){
       // 페이지네이션
       // 현재 페이지 번호
@@ -72,8 +73,7 @@ export default {
           // res.headers["x-total-count"] : 데이터의 총 개수. 즉, todos의 개수
           // 버전 문제가 있을 수 있음 : npm install -g json-server@0.17.0
           numberOfTodos.value = res.headers["x-total-count"];
-          emit("get-todos", res.data);
-
+          emit("set-todos", res.data);
         } catch (err) {
           console.log(err);
           emit("get-todos-error", "Something went wrong.");
@@ -85,6 +85,8 @@ export default {
       watch(()=> props.searchText,()=>{
         getTodos(1);
       });
+
+      defineExpose({getTodos})
       return{
         numberOfPages,
         currentPage,
