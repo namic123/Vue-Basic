@@ -31,7 +31,7 @@
   </div>
 </template>
 <script>
-import {ref, computed, watchEffect, reactive} from 'vue';
+import {ref, computed} from 'vue';
 // 다른 컴포넌트 import
 import TodoSimpleForm from "./components/TodoSimpleForm.vue";
 import TodoList from "@/components/TodoList.vue";
@@ -54,19 +54,6 @@ export default {
     };
     const searchText = ref("");
     const error = ref("");
-
-    const a = reactive({
-      b:1
-    });
-    // reactive state(예:ref 등)의 변경을 감지함.
-    // 콜백 함수 내에서 접근한 모든 반응형 상태를 자동으로 추적한다.
-    // 특정한 데이터를 지정하지 않아도 되므로, 여러 반응형 상태에 대한 의존성이 있는 경우 유용하다.
-    watchEffect(()=>{
-      console.log(a.b);
-    });
-    // watchEffect가 두번 실행됨.
-    // 1, 4(변경을 감지하여 재실행)
-    a.b = 4;
 
 
     // method
