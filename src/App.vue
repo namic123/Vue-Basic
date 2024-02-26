@@ -54,29 +54,6 @@ export default {
     };
     const searchText = ref("");
     const error = ref("");
-    const a = reactive({
-      b:1,
-      c:3
-    });
-    const x = ref(1);
-    const z = ref(2);
-
-    // 명시적으로 감시할 특정 소스를 지정해야함.(reactive state(반응형 참조), 반응형 객체의속성 등)
-    // 소스의 이전 값과 현재 값을 콜백 함수로 받을 수 있으며, 주로 특정 데이터의 변경을 정확하게 감시하고자 할 때 사용.
-    // watchEffect와의 차이점
-    // 1. watch는 명시적으로 감시할 대상 지정, watchEffect는 콜백 함수 내에서 접근한 모든 반응형 상태를 자동 감지
-    // 2. watch는 보다 세밀한 제어 옵션(예: 이전 값과 현재 값의 비교, 지연 실행 등)을 제공,
-    // 반면, watchEffect는 사용의 편의성을 제공하지만 그만큼 제어 옵션이 제한적
-    // 3. watchEffect는 정의되자마자 즉시 실행되며, 의존성이 변경될 때마다 재실행, watch는 감시 대상의 변경 시에만 콜백 함수가 실행
-    watch(() => [a.b, a.c],(current, prev)=>{
-      // 1번 인자에는 현재 상태, 2번 인자에는 이전 상태
-      console.log(current, prev); // [2, 3] -> [1, 3] 출력
-    });
-  watch([x, z],(current, prev)=>{
-    console.log("ref 사용 -> ", current, prev);
-  });
-
-    a.b= 2;
 
     // method
     // todo 완료 여부
@@ -131,18 +108,18 @@ export default {
     function setTodoError(data){
       error.value = data;
     }
-    // 검색 로직 메서드
-    const filteredTodos = computed(() => {
-      // searchText가 빈문자열이 아닐때
-      if (searchText.value) {
-        // todos 배열 요소를 각각 꺼내서 filtering
-        return todos.value.filter((todo) => {
-          // 배열의 요소가 searchText가 포함된 것만 리턴
-          return todo.subject.includes(searchText.value);
-        });
-      }
-      return todos.value;
-    });
+    // // 검색 로직 메서드
+    // const filteredTodos = computed(() => {
+    //   // searchText가 빈문자열이 아닐때
+    //   if (searchText.value) {
+    //     // todos 배열 요소를 각각 꺼내서 filtering
+    //     return todos.value.filter((todo) => {
+    //       // 배열의 요소가 searchText가 포함된 것만 리턴
+    //       return todo.subject.includes(searchText.value);
+    //     });
+    //   }
+    //   return todos.value;
+    // });
     return {
       todos,
       todoStyle,
@@ -151,7 +128,7 @@ export default {
       addTodo,
       handleComplete,
       searchText,
-      filteredTodos,
+      // filteredTodos,
       setTodoList,
       setTodoError,
     };
