@@ -68,7 +68,7 @@ export default {
         currentPage.value = page;
         try {
           const res = await axios.get(
-            `http://localhost:3000/todos?subject_like=${props.searchText}&_page=${page}&_limit=${limit}`
+            `http://localhost:3000/todos?_sort=id&_order=desc&subject_like=${props.searchText}&_page=${page}&_limit=${limit}`
           );
           // res.headers["x-total-count"] : 데이터의 총 개수. 즉, todos의 개수
           // 버전 문제가 있을 수 있음 : npm install -g json-server@0.17.0
