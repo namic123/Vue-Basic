@@ -7,6 +7,7 @@
       type="text"
       v-model="searchText"
       placeholder="Search"
+      @keyup.enter='searchTodo'
     />
     <hr />
     <!-- 자식 컴포넌트에서 데이터를 보내고 addTodo 메서드 실행-->
@@ -106,6 +107,13 @@ export default {
         error.value = "Something went wrong.";
       }
     }
+
+    // 검색 input에 값 입력 후 엔터 시 getTodos 실행
+    let timeout = null;
+    const searchTodo = () => {
+      clearTimeout(timeout);
+      getTodoRef.value.getTodos(1);
+    }
     // Todo 가져오기 (페이지네이션)
     function setTodoList(data){
       todos.value = data;
@@ -138,6 +146,7 @@ export default {
       setTodoList,
       setTodoError,
       getTodoRef,
+      searchTodo,
     };
   },
 };

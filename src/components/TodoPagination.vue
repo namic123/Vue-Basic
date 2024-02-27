@@ -82,8 +82,13 @@ export default {
       getTodos();
 
       // props를 watch하기 위해서는 콜백 함수 ()=>를 이용하여 현재 값을 가져와야 한다.
+      let timeout = null;
       watch(()=> props.searchText,()=>{
-        getTodos(1);
+        // 중복 요청을 방지하기 위해 중복 호출시 이전 호출 건은 취소
+        clearTimeout(timeout);
+        timeout = setTimeout(()=>{
+          getTodos(1);
+        }, 1000);
       });
 
       defineExpose({getTodos})
