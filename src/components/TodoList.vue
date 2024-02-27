@@ -6,6 +6,7 @@
   >
     <div
       class="card-body p-2 d-flex align-items-center"
+      style='cursor:pointer'
       @click='moveToPage(todoItem.id)'
     >
       <div class="form-check flex-grow-1">
@@ -13,7 +14,7 @@
           class="form-check-input"
           type="checkbox"
           :checked="todoItem.completed"
-          @change="handleTodoCompleted(todoIndex)"
+          @click.stop="handleTodoCompleted(todoIndex)"
         />
         <!-- 해당 todo가 completed true일때만 스타일 적용 -->
         <label class="form-check-label" :class="{todo: todoItem.completed}"
@@ -23,7 +24,7 @@
       <div>
         <button
           class="btn btn-danger btn-sm"
-          @click="handleTodoDelete(todoIndex)"
+          @click.stop="handleTodoDelete(todoIndex)"
         >
           Delete
         </button>
@@ -80,4 +81,4 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style></style>
