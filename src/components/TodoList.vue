@@ -4,7 +4,10 @@
     :key="todoItem.id"
     class="card mt-2"
   >
-    <div class="card-body p-2 d-flex align-items-center">
+    <div
+      class="card-body p-2 d-flex align-items-center"
+      @click='moveToPage(todoItem.id)'
+    >
       <div class="form-check flex-grow-1">
         <input
           class="form-check-input"
@@ -29,6 +32,7 @@
   </div>
 </template>
 <script>
+import { useRouter} from 'vue-router';
 // props 주의할 점, props는 단방향 바인딩 (부모 -> 자식)이므로,
 // 자식 컴포넌트에서 부모 컴포넌트가 가진 데이터를 변경하면 안된다.
 export default {
@@ -45,6 +49,7 @@ export default {
   // 장점 : context.emit의 중복을 피함, emit하는 이벤트를 한 눈에 볼 수 있으므로, 가독성 증가.
   emits: ["handle-todo-complete", "delete-todo"],
   setup(props, {emit}) {
+    const router = useRouter();
     // todo 완료 여부
     function handleTodoCompleted(todoIndex) {
       emit("handle-todo-complete", todoIndex);
@@ -52,10 +57,18 @@ export default {
     function handleTodoDelete(todoIndex) {
       emit("handle-todo-delete", todoIndex);
     }
+    const moveToPage = (todoId) => {
+      console.log(todoId);
+      // push한 url로 이동시킴
+      // react의 useNavigate와 같은 역할
+      router.push('/todos/'+ todoId);
+    }
     return {
       handleTodoCompleted,
       handleTodoDelete,
+      moveToPage
     };
+
   },
 };
 </script>
