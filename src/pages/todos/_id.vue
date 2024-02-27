@@ -4,9 +4,22 @@
     Loading...
   </div>
   <form v-else>
-    <div class="form-group">
-      <label>Todo Subject</label>
-      <input type='text' class='form-control' v-model='todo.subject'>
+    <div class='row'>
+      <div class='col-6'>
+        <div class="form-group">
+          <label>Subject</label>
+          <input type='text' class='form-control' v-model='todo.subject'>
+        </div>
+      </div>
+      <div class='col-6'>
+        <div class="form-group">
+          <label>Status</label>
+          <div>
+            <button v-if='todo.completed' class='btn btn-success'>Completed</button>
+            <button v-else class='btn btn-danger'>Incomplete</button>
+          </div>
+        </div>
+      </div>
     </div>
     <button class='btn btn-primary'>Save</button>
   </form>
@@ -28,7 +41,6 @@ export default {
     // id에 해당하는 db가져오기
     const getTodo = async () => {
       const res = await axios.get('http://localhost:3000/todos/'+ route.params.id);
-      console.log(res.data.subject);
       todo.value = res.data;
       loading.value = false;
     }
