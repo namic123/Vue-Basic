@@ -1,10 +1,10 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">JaySung</a>
+    <router-link class="navbar-brand" to="/">JaySung</router-link>
 
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="/todos">Todos</a>
+          <router-link class="nav-link" to="/todos">Todos</router-link>
         </li>
       </ul>
   </nav>
