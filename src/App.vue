@@ -9,7 +9,9 @@
       </ul>
   </nav>
 <!-- index.js에 정의한 url path 별 컴포넌트가 마운트됨. -->
-  <router-view/>
+  <div class='container'>
+    <router-view/>
+  </div>
 </template>
 <script>
 export default {}
