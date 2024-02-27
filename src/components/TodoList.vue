@@ -61,7 +61,14 @@ export default {
       console.log(todoId);
       // push한 url로 이동시킴
       // react의 useNavigate와 같은 역할
-      router.push('/todos/'+ todoId);
+      // router.push('/todos/' + todoId); 아래 코드와 같은 역할
+      // 아래 코드가 명시적이므로, 가독성이나 유지보수에 좋음
+      router.push({
+        name:'Todo',
+        params:{
+          id: todoId
+        }
+      });
     }
     return {
       handleTodoCompleted,
