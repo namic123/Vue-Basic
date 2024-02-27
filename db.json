@@ -156,8 +156,8 @@
       "id": 31
     },
     {
-      "subject": "todo test blahblahblah",
-      "completed": false,
+      "subject": "todo test",
+      "completed": true,
       "id": 32
     }
   ]

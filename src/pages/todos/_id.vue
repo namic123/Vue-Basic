@@ -3,7 +3,7 @@
   <div v-if='loading'>
     Loading...
   </div>
-  <form v-else>
+  <form v-else @submit.prevent='updateTodo'>
     <div class='row'>
       <div class='col-6'>
         <div class="form-group">
@@ -27,7 +27,7 @@
         </div>
       </div>
     </div>
-    <button type='submit' class='btn btn-primary' @click='saveTodo'>Save</button>
+    <button type='submit' class='btn btn-primary' @click='updateTodo'>Save</button>
     <button class='btn btn-outline-dark ml-2' @click='moveToTodoListPage'>Cancle</button>
   </form>
 </template>
@@ -66,11 +66,25 @@ export default {
       });
     }
 
+    async function updateTodo(){
+      try {
+        await axios.put(`http://localhost:3000/todos/${route.params.id}`, {
+          subject: todo.value.subject,
+          completed: todo.value.completed,
+        })
+        router.push({
+          name:'Todos',
+        });
+      }catch(error){
+        console.log(error);
+      }
+    }
     return {
       todo,
       loading,
       toggleTodoStatus,
       moveToTodoListPage,
+      updateTodo,
     }
   }
 }
