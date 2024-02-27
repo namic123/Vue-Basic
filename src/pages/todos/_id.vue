@@ -15,8 +15,9 @@
         <div class="form-group">
           <label>Status</label>
           <div>
-            <button v-if='todo.completed' class='btn btn-success'>Completed</button>
-            <button v-else class='btn btn-danger'>Incomplete</button>
+            <button class='btn' :class='todo.completed ? "btn-success":"btn-danger"'>
+              {{todo.completed ? "Completed":"Incompleted"}}
+            </button>
           </div>
         </div>
       </div>
