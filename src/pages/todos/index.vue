@@ -61,14 +61,14 @@ export default {
     const getTodoRef = ref(null);
     // method
     // todo 완료 여부
-    async function handleComplete(index) {
+    async function handleComplete(index, checked) {
       error.value = "";
       const id = todos.value[index].id;
       try {
         await axios.patch("http://localhost:3000/todos/" + id, {
-          completed: !todos.value[index].completed,
+          completed: checked,
         });
-        todos.value[index].completed = !todos.value[index].completed;
+        todos.value[index].completed = checked;
       } catch (err) {
         console.log(err);
         error.value = "Something went wrong.";

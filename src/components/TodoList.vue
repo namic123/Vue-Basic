@@ -14,7 +14,7 @@
           class="form-check-input"
           type="checkbox"
           :checked="todoItem.completed"
-          @click.stop="handleTodoCompleted(todoIndex)"
+          @click.stop="handleTodoCompleted(todoIndex, $event)"
         />
         <!-- 해당 todo가 completed true일때만 스타일 적용 -->
         <label class="form-check-label" :class="{todo: todoItem.completed}"
@@ -52,8 +52,8 @@ export default {
   setup(props, {emit}) {
     const router = useRouter();
     // todo 완료 여부
-    function handleTodoCompleted(todoIndex) {
-      emit("handle-todo-complete", todoIndex);
+    function handleTodoCompleted(todoIndex, event) {
+      emit("handle-todo-complete", todoIndex, event.target.checked);
     }
     function handleTodoDelete(todoIndex) {
       emit("handle-todo-delete", todoIndex);
