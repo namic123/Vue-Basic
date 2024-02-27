@@ -1,6 +1,7 @@
 import { createRouter,createWebHistory } from 'vue-router';
 import Home from '../pages/index.vue';
 import Todos from  '../pages/todos/index.vue';
+import Todo from  '../pages/todos/_id.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -17,6 +18,12 @@ const router = createRouter({
       path: '/todos',
       name: 'Todos',
       component: Todos // 라우트할 컴포넌트
+    },
+    {
+      // TO-DO 수정페이지
+      path: '/todos/:id',
+      name: 'Todo', // 컴포넌트의 고유명
+      component: Todo // 라우트할 컴포넌트
     },
   ]
 });
