@@ -10,13 +10,13 @@ const router = createRouter({
       // pages 폴더 안에 index.vue를 라우트
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home // 라우트할 컴포넌트
     },
     {
       // pages 폴더 안에, todos 폴더 안 index.vue를 라우트
       path: '/todos',
       name: 'Todos',
-      component: Todos
+      component: Todos // 라우트할 컴포넌트
     },
   ]
 });
