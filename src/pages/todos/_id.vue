@@ -15,18 +15,24 @@
         <div class="form-group">
           <label>Status</label>
           <div>
-            <button class='btn' :class='todo.completed ? "btn-success":"btn-danger"'>
+            <button
+              type='button'
+              class='btn'
+              :class='todo.completed ? "btn-success":"btn-danger"'
+              @click="toggleTodoStatus"
+            >
               {{todo.completed ? "Completed":"Incompleted"}}
             </button>
           </div>
         </div>
       </div>
     </div>
-    <button class='btn btn-primary'>Save</button>
+    <button type='submit' class='btn btn-primary' @click='saveTodo'>Save</button>
+    <button class='btn btn-outline-dark ml-2' @click='moveToTodoListPage'>Cancle</button>
   </form>
 </template>
 <script>
-import {useRoute} from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 import axios from 'axios';
 import {ref} from 'vue';
 export default {
@@ -34,6 +40,7 @@ export default {
     const todo = ref(null);
     const loading = ref(true);
     const route = useRoute();
+    const router = useRouter();
     // 현재 라우트 객체에 접근하고 싶을 때, useRoute를 사용하여 그 정보를 얻을 수 있다.
     // 라우트 파라미터 접근: URL의 동적 세그먼트 (예: /todos/:id)에 접근할 때 사용한다.
     // 쿼리 파라미터 접근:url의 쿼리 파라미터(예: /todos?id=1)에 접근할 떄 사용
@@ -46,9 +53,24 @@ export default {
       loading.value = false;
     }
     getTodo();
+    async function toggleTodoStatus(){
+      todo.value.completed = !todo.value.completed
+      // await axios.patch('http://localhost:3000/todos/'+ route.params.id,{
+      //   completed:!todo.value.completed,
+      // })
+    }
+
+    function moveToTodoListPage(){
+      router.push({
+          name:'Todos',
+      });
+    }
+
     return {
       todo,
       loading,
+      toggleTodoStatus,
+      moveToTodoListPage,
     }
   }
 }
