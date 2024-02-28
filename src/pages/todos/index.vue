@@ -43,6 +43,7 @@ import TodoList from "@/components/TodoList.vue";
 import TodoPagination from "@/components/TodoPagination.vue";
 import Toast from '@/components/Toast.vue';
 import axios from "axios";
+import {useToast} from '@/composables/toast';
 
 export default {
   // 컴포넌트를 사용할 수 있도록 등록
@@ -62,23 +63,14 @@ export default {
     const searchText = ref("");
     const error = ref("");
     const getTodoRef = ref(null);
-    const showToast = ref(false);
-    const toastMessage = ref("");
-    const toastAlertType = ref('');
-    const toastTimeout = ref(null);
-    // method
 
-    // 토스트 발생
-    function triggerToast(message, type='success'){
-      toastMessage.value = message;
-      toastAlertType.value = type;
-      showToast.value = true;
-      toastTimeout.value = setTimeout(()=>{
-        toastMessage.value = "";
-        toastAlertType.value = "";
-        showToast.value = false;
-      },3000);
-    }
+    const {
+      toastMessage,
+      toastAlertType,
+      showToast,
+      triggerToast,
+    } = useToast();
+
     // todo 완료 여부
     async function handleComplete(index, checked) {
       error.value = "";
