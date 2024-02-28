@@ -1,7 +1,12 @@
 <template>
   <!-- container -->
-  <div >
-    <h2>To-Do List</h2>
+  <div>
+    <div class='d-flex justify-content-between mb-3'>
+      <h2>To-Do List</h2>
+      <button class='btn btn-primary' @click='moveToCreatePage'>
+        Create Todo
+      </button>
+    </div>
     <input
       class="form-control"
       type="text"
@@ -44,6 +49,7 @@ import TodoPagination from "@/components/TodoPagination.vue";
 import Toast from '@/components/Toast.vue';
 import axios from "axios";
 import {useToast} from '@/composables/toast';
+import {useRouter} from 'vue-router';
 
 export default {
   // 컴포넌트를 사용할 수 있도록 등록
@@ -63,6 +69,8 @@ export default {
     const searchText = ref("");
     const error = ref("");
     const getTodoRef = ref(null);
+
+    const router = useRouter();
 
     const {
       toastMessage,
@@ -139,6 +147,12 @@ export default {
       error.value = data;
     }
 
+    function moveToCreatePage(){
+      router.push({
+        name:'TodoCreate',
+      })
+    }
+
     // // 검색 로직 메서드
     // const filteredTodos = computed(() => {
     //   // searchText가 빈문자열이 아닐때
@@ -168,6 +182,7 @@ export default {
       toastAlertType,
       toastMessage,
       triggerToast,
+      moveToCreatePage,
     };
   },
 };
