@@ -30,17 +30,25 @@
     <button type='submit' class='btn btn-primary' @click='updateTodo' :disabled='todoUpdated'>Save</button>
     <button class='btn btn-outline-dark ml-2' @click='moveToTodoListPage'>Cancle</button>
   </form>
+  <Toast v-if='showToast' :message='toastMessage' :type='toastAlertType'/>
 </template>
 <script>
 import {useRoute, useRouter} from 'vue-router';
 import axios from 'axios';
 import {computed, ref} from 'vue';
 import _ from 'lodash'; // Lodash는 기본적으로 인포트 할때 언더스코어(_)를 사용
+import Toast from '@/components/Toast.vue'
 export default {
+  components :{
+    Toast
+  },
   setup(){
     const todo = ref(null);
     const originalTodo = ref(null);
     const loading = ref(true);
+    const showToast = ref(false);
+    const toastMessage = ref("");
+    const toastAlertType = ref('');
     const route = useRoute();
     const router = useRouter();
     // 현재 라우트 객체에 접근하고 싶을 때, useRoute를 사용하여 그 정보를 얻을 수 있다.
@@ -50,11 +58,15 @@ export default {
     console.log(route.params.id);
     // id에 해당하는 db가져오기
     const getTodo = async () => {
+      try{
       const res = await axios.get('http://localhost:3000/todos/'+ route.params.id);
       todo.value = {...res.data}; // 객체의 주소를 할당하는 것이 아닌 데이터 그 자체를 복사
       originalTodo.value = {...res.data};
       loading.value = false;
-    }
+    }catch (error){
+        triggerToast("오류가 발생했습니다!", "danger");
+      }
+    };
 
     // todo의 변경사항이 있는지 확인하는 메서드
     const todoUpdated = computed(()=>{
@@ -63,6 +75,8 @@ export default {
     })
 
     getTodo();
+
+    // Todo의 완료 상태 핸들 메서드
     async function toggleTodoStatus(){
       todo.value.completed = !todo.value.completed
       // await axios.patch('http://localhost:3000/todos/'+ route.params.id,{
@@ -70,12 +84,23 @@ export default {
       // })
     }
 
+    // Todos페이지로 이동
     function moveToTodoListPage(){
       router.push({
           name:'Todos',
       });
     }
 
+    function triggerToast(message, type='success'){
+      toastMessage.value = message;
+      toastAlertType.value = type;
+      showToast.value = true;
+      setTimeout(()=>{
+        toastMessage.value = "";
+        toastAlertType.value = "";
+        showToast.value = false;
+      },3000)
+    }
     async function updateTodo(){
       try {
         const res = await axios.put(`http://localhost:3000/todos/${route.params.id}`, {
@@ -83,11 +108,10 @@ export default {
           completed: todo.value.completed,
         });
         originalTodo.value = {...res.data};
-        router.push({
-          name:'Todos',
-        });
+        triggerToast("Todo가 성공적으로 업데이트 되었습니다!", "success");
       }catch(error){
         console.log(error);
+        triggerToast("오류가 발생했습니다!", "danger");
       }
     }
     return {
@@ -97,6 +121,9 @@ export default {
       moveToTodoListPage,
       updateTodo,
       todoUpdated,
+      showToast,
+      toastMessage,
+      toastAlertType,
     }
   }
 }
