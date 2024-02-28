@@ -27,26 +27,30 @@
     <!-- 페이지네이션 -->
     <TodoPagination
       :searchText='searchText'
+      :triggerToast='triggerToast'
       @set-todos="setTodoList"
       @get-todos-error='setTodoError'
       ref='getTodoRef'
     />
   </div>
+  <Toast v-if='showToast' :message='toastMessage' :type='toastAlertType'/>
 </template>
 <script>
 import {ref} from 'vue';
 // 다른 컴포넌트 import
 import TodoSimpleForm from "@/components/TodoSimpleForm.vue";
 import TodoList from "@/components/TodoList.vue";
-import TodoPagination from "@/components/TodoPagination.vue"
+import TodoPagination from "@/components/TodoPagination.vue";
+import Toast from '@/components/Toast.vue';
 import axios from "axios";
 
 export default {
-  // 컴포넌트 등록
+  // 컴포넌트를 사용할 수 있도록 등록
   components: {
     TodoSimpleForm,
     TodoList,
     TodoPagination,
+    Toast,
   },
   setup() {
     // field
@@ -58,7 +62,23 @@ export default {
     const searchText = ref("");
     const error = ref("");
     const getTodoRef = ref(null);
+    const showToast = ref(false);
+    const toastMessage = ref("");
+    const toastAlertType = ref('');
+    const toastTimeout = ref(null);
     // method
+
+    // 토스트 발생
+    function triggerToast(message, type='success'){
+      toastMessage.value = message;
+      toastAlertType.value = type;
+      showToast.value = true;
+      toastTimeout.value = setTimeout(()=>{
+        toastMessage.value = "";
+        toastAlertType.value = "";
+        showToast.value = false;
+      },3000);
+    }
     // todo 완료 여부
     async function handleComplete(index, checked) {
       error.value = "";
@@ -70,6 +90,7 @@ export default {
         todos.value[index].completed = checked;
       } catch (err) {
         console.log(err);
+        triggerToast("오류가 발생했습니다!", "danger");
         error.value = "Something went wrong.";
       }
     }
@@ -85,6 +106,8 @@ export default {
         }
       } catch (err) {
         console.log(err);
+        triggerToast("오류가 발생했습니다!", "danger");
+
         error.value = "Something went wrong.";
       }
     }
@@ -104,6 +127,8 @@ export default {
       } catch (err) {
         // 아래 axios 코드와 동일하게 동작 try-catch
         console.log(err);
+        triggerToast("오류가 발생했습니다!", "danger");
+
         error.value = "Something went wrong.";
       }
     }
@@ -147,6 +172,10 @@ export default {
       setTodoError,
       getTodoRef,
       searchTodo,
+      showToast,
+      toastAlertType,
+      toastMessage,
+      triggerToast,
     };
   },
 };

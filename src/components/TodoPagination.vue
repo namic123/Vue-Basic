@@ -39,6 +39,7 @@
 <script>
 import {computed, ref, watch, defineExpose} from 'vue';
 import axios from 'axios';
+import {method} from 'lodash';
 
 export default {
   props: {
@@ -47,6 +48,10 @@ export default {
       type: String,
       required: true,
     },
+    triggerToast:{
+      type:method,
+      required: true,
+    }
   },
   emits: ["set-todos"],
     setup(props,{emit}){
@@ -76,6 +81,7 @@ export default {
           emit("set-todos", res.data);
         } catch (err) {
           console.log(err);
+          props.triggerToast("오류가 발생했습니다!", "danger");
           emit("get-todos-error", "Something went wrong.");
         }
       };
