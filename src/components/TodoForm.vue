@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <button type='submit' class='btn btn-primary mt-2' @click='updateTodo' :disabled='todoUpdated'>Save</button>
+    <button type='submit' class='btn btn-primary mt-2' @click='updateTodo' :disabled='todoUpdated'>{{editing?"Update":"Create"}}</button>
     <button class='btn btn-outline-dark ml-2 mt-2' @click='moveToTodoListPage'>Cancle</button>
   </form>
   <Toast v-if='showToast' :message='toastMessage' :type='toastAlertType'/>
@@ -124,12 +124,28 @@ export default {
 
     async function updateTodo(){
       try {
-        const res = await axios.put(`http://localhost:3000/todos/${route.params.id}`, {
+        let res;
+        const data = {
           subject: todo.value.subject,
           completed: todo.value.completed,
-        });
-        originalTodo.value = {...res.data};
-        triggerToast("Todo가 성공적으로 업데이트 되었습니다!", "success");
+          body:todo.value.body
+        }
+        // 페이지 별 요청
+        // 수정 페이지인 경우
+        if(props.editing) {
+            res = await axios.put(`http://localhost:3000/todos/${route.params.id}`, data);
+            originalTodo.value = {...res.data};
+        }
+        // 생성 페이지인 경우
+        else {
+            res = await axios.post(`http://localhost:3000/todos`, data);
+            // 새로운 todo 작성할 수 있도록 초기화
+            todo.value.subject = "";
+            todo.value.body = "";
+        }
+        // 페이지 별 토스트 메세지
+        const message = 'Todo가 성공적으로' + props.editing ? "업데이트 되었습니다!":"추가 되었습니다!";
+        triggerToast(message, "success");
       }catch(error){
         console.log(error);
         triggerToast("오류가 발생했습니다!", "danger");
