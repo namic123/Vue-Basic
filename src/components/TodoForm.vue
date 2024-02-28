@@ -9,6 +9,9 @@
         <div class="form-group">
           <label>Subject</label>
           <input type='text' class='form-control' v-model='todo.subject'>
+          <div v-if='subjectError' style='color:red'>
+            {{subjectError}}
+          </div>
         </div>
       </div>
       <div class='col-6' v-if='editing'>
@@ -67,6 +70,7 @@ export default {
     });
     const originalTodo = ref(null);
     const loading = ref(false);
+    const subjectError = ref("");
     const route = useRoute();
     const router = useRouter();
 
@@ -124,6 +128,12 @@ export default {
 
     // Todo 생성 및 수정 페이지 상태 저장
     async function saveTodo(){
+      subjectError.value = "";
+     // Subject가 비어있는 경우, break 시킴
+      if(!todo.value.subject){
+        subjectError.value = 'Subject는 필수 입력입니다.'
+        return
+      }
       try {
         let res;
         const data = {
@@ -162,6 +172,7 @@ export default {
       showToast,
       toastMessage,
       toastAlertType,
+      subjectError,
     }
   }
 }
