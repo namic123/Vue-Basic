@@ -3,7 +3,7 @@
   <div v-if='loading'>
     Loading...
   </div>
-  <form v-else @submit.prevent='updateTodo'>
+  <form v-else @submit.prevent='saveTodo'>
     <div class='row'>
       <div class='col-6'>
         <div class="form-group">
@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <button type='submit' class='btn btn-primary mt-2' @click='updateTodo' :disabled='todoUpdated'>{{editing?"Update":"Create"}}</button>
+    <button type='submit' class='btn btn-primary mt-2' @click='saveTodo' :disabled='todoUpdated'>{{editing?"Update":"Create"}}</button>
     <button class='btn btn-outline-dark ml-2 mt-2' @click='moveToTodoListPage'>Cancle</button>
   </form>
   <Toast v-if='showToast' :message='toastMessage' :type='toastAlertType'/>
@@ -122,7 +122,8 @@ export default {
       });
     }
 
-    async function updateTodo(){
+    // Todo 생성 및 수정 페이지 상태 저장
+    async function saveTodo(){
       try {
         let res;
         const data = {
@@ -156,7 +157,7 @@ export default {
       loading,
       toggleTodoStatus,
       moveToTodoListPage,
-      updateTodo,
+      saveTodo,
       todoUpdated,
       showToast,
       toastMessage,
