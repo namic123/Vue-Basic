@@ -146,18 +146,8 @@
       "id": 29
     },
     {
-      "subject": "9",
-      "completed": false,
-      "id": 30
-    },
-    {
-      "subject": "0",
-      "completed": false,
-      "id": 31
-    },
-    {
       "subject": "todo test12345",
-      "completed": true,
+      "completed": false,
       "id": 32
     }
   ]
