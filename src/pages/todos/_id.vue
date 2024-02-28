@@ -35,7 +35,7 @@
 <script>
 import {useRoute, useRouter} from 'vue-router';
 import axios from 'axios';
-import {computed, onBeforeMount, onBeforeUnmount, onBeforeUpdate, onMounted, onUnmounted, onUpdated, ref} from 'vue';
+import {computed,  onUnmounted, ref} from 'vue';
 import _ from 'lodash'; // Lodash는 기본적으로 인포트 할때 언더스코어(_)를 사용
 import Toast from '@/components/Toast.vue'
 export default {
@@ -43,26 +43,6 @@ export default {
     Toast
   },
   setup(){
-    onBeforeMount(()=>{
-      // DOM이 마운트 되기 전 실행할 로직
-    });
-    onMounted(()=>{
-      // 마운트된 후 실행할 로직
-    })
-    onBeforeUpdate(()=>{
-      // State(ref 등)가 업데이트 되기 전 실행 로직
-    });
-    onUpdated(()=>{
-      // State(ref 등)가 업데이트 된 후 실행 로직
-    })
-
-    // 아래 Unmount메서드는 주로 해당 컴포넌트를 빠져나가기 전 불필요한 메모리를 정리하는 역할로 사용된다.
-    onBeforeUnmount(()=>{
-      // 해당 컴포넌트의 DOM에 빠지기 전(예: 페이지 이동) 실행
-    })
-    onUnmounted(()=>{
-    // 해당 컴포넌트의 DOM에 빠진 후(예: 페이지 이동) 실행
-    })
     const todo = ref(null);
     const originalTodo = ref(null);
     const loading = ref(true);
@@ -71,6 +51,22 @@ export default {
     const toastAlertType = ref('');
     const route = useRoute();
     const router = useRouter();
+    const timeout = ref(null);
+    // 컴포넌트에 빠졌을 때 메모리를 정리하기 위해서 불필요한 triggerToast실행을 멈춤
+    onUnmounted(()=>{
+      // 해당 컴포넌트의 DOM에 빠진 후(예: 페이지 이동) 실행
+      clearTimeout(timeout.value); // setTimeout이 멈춤
+    })
+    function triggerToast(message, type='success'){
+      toastMessage.value = message;
+      toastAlertType.value = type;
+      showToast.value = true;
+      timeout.value = setTimeout(()=>{
+        toastMessage.value = "";
+        toastAlertType.value = "";
+        showToast.value = false;
+      },3000);
+    }
     // 현재 라우트 객체에 접근하고 싶을 때, useRoute를 사용하여 그 정보를 얻을 수 있다.
     // 라우트 파라미터 접근: URL의 동적 세그먼트 (예: /todos/:id)에 접근할 때 사용한다.
     // 쿼리 파라미터 접근:url의 쿼리 파라미터(예: /todos?id=1)에 접근할 떄 사용
@@ -111,16 +107,6 @@ export default {
       });
     }
 
-    function triggerToast(message, type='success'){
-      toastMessage.value = message;
-      toastAlertType.value = type;
-      showToast.value = true;
-      setTimeout(()=>{
-        toastMessage.value = "";
-        toastAlertType.value = "";
-        showToast.value = false;
-      },3000)
-    }
     async function updateTodo(){
       try {
         const res = await axios.put(`http://localhost:3000/todos/${route.params.id}`, {
