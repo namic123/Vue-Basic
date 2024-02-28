@@ -1,7 +1,7 @@
 <template>
   <!-- container -->
   <div>
-    <div class='d-flex justify-content-between mb-3'>
+    <div class='d-flex justify-content-between mb-3 mt-2'>
       <h2>To-Do List</h2>
       <button class='btn btn-primary' @click='moveToCreatePage'>
         Create Todo
@@ -15,8 +15,6 @@
       @keyup.enter='searchTodo'
     />
     <hr />
-    <!-- 자식 컴포넌트에서 데이터를 보내고 addTodo 메서드 실행-->
-    <TodoSimpleForm @add-todo="addTodo" />
     <!-- 응답 error 출력   -->
     <div style="color: red">{{ error }}</div>
     <!-- todos가 비어 있는 경우 출력 -->
@@ -43,7 +41,6 @@
 <script>
 import {ref} from 'vue';
 // 다른 컴포넌트 import
-import TodoSimpleForm from "@/components/TodoSimpleForm.vue";
 import TodoList from "@/components/TodoList.vue";
 import TodoPagination from "@/components/TodoPagination.vue";
 import Toast from '@/components/Toast.vue';
@@ -54,7 +51,6 @@ import {useRouter} from 'vue-router';
 export default {
   // 컴포넌트를 사용할 수 있도록 등록
   components: {
-    TodoSimpleForm,
     TodoList,
     TodoPagination,
     Toast,
@@ -153,18 +149,6 @@ export default {
       })
     }
 
-    // // 검색 로직 메서드
-    // const filteredTodos = computed(() => {
-    //   // searchText가 빈문자열이 아닐때
-    //   if (searchText.value) {
-    //     // todos 배열 요소를 각각 꺼내서 filtering
-    //     return todos.value.filter((todo) => {
-    //       // 배열의 요소가 searchText가 포함된 것만 리턴
-    //       return todo.subject.includes(searchText.value);
-    //     });
-    //   }
-    //   return todos.value;
-    // });
     return {
       todos,
       todoStyle,
