@@ -35,7 +35,7 @@
 <script>
 import {useRoute, useRouter} from 'vue-router';
 import axios from 'axios';
-import {computed, ref} from 'vue';
+import {computed, onBeforeMount, onBeforeUnmount, onBeforeUpdate, onMounted, onUnmounted, onUpdated, ref} from 'vue';
 import _ from 'lodash'; // Lodash는 기본적으로 인포트 할때 언더스코어(_)를 사용
 import Toast from '@/components/Toast.vue'
 export default {
@@ -43,6 +43,26 @@ export default {
     Toast
   },
   setup(){
+    onBeforeMount(()=>{
+      // DOM이 마운트 되기 전 실행할 로직
+    });
+    onMounted(()=>{
+      // 마운트된 후 실행할 로직
+    })
+    onBeforeUpdate(()=>{
+      // State(ref 등)가 업데이트 되기 전 실행 로직
+    });
+    onUpdated(()=>{
+      // State(ref 등)가 업데이트 된 후 실행 로직
+    })
+
+    // 아래 Unmount메서드는 주로 해당 컴포넌트를 빠져나가기 전 불필요한 메모리를 정리하는 역할로 사용된다.
+    onBeforeUnmount(()=>{
+      // 해당 컴포넌트의 DOM에 빠지기 전(예: 페이지 이동) 실행
+    })
+    onUnmounted(()=>{
+    // 해당 컴포넌트의 DOM에 빠진 후(예: 페이지 이동) 실행
+    })
     const todo = ref(null);
     const originalTodo = ref(null);
     const loading = ref(true);
