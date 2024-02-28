@@ -27,17 +27,19 @@
         </div>
       </div>
     </div>
-    <button type='submit' class='btn btn-primary' @click='updateTodo'>Save</button>
+    <button type='submit' class='btn btn-primary' @click='updateTodo' :disabled='todoUpdated'>Save</button>
     <button class='btn btn-outline-dark ml-2' @click='moveToTodoListPage'>Cancle</button>
   </form>
 </template>
 <script>
 import {useRoute, useRouter} from 'vue-router';
 import axios from 'axios';
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
+import _ from 'lodash'; // Lodash는 기본적으로 인포트 할때 언더스코어(_)를 사용
 export default {
   setup(){
     const todo = ref(null);
+    const originalTodo = ref(null);
     const loading = ref(true);
     const route = useRoute();
     const router = useRouter();
@@ -49,9 +51,17 @@ export default {
     // id에 해당하는 db가져오기
     const getTodo = async () => {
       const res = await axios.get('http://localhost:3000/todos/'+ route.params.id);
-      todo.value = res.data;
+      todo.value = {...res.data}; // 객체의 주소를 할당하는 것이 아닌 데이터 그 자체를 복사
+      originalTodo.value = {...res.data};
       loading.value = false;
     }
+
+    // todo의 변경사항이 있는지 확인하는 메서드
+    const todoUpdated = computed(()=>{
+      // 기존 투두에 변경사항이 있는지 확인
+      return _.isEqual(todo.value, originalTodo.value);  // lodash의 참조값이 아닌 값 자체 비교 메서드
+    })
+
     getTodo();
     async function toggleTodoStatus(){
       todo.value.completed = !todo.value.completed
@@ -68,10 +78,11 @@ export default {
 
     async function updateTodo(){
       try {
-        await axios.put(`http://localhost:3000/todos/${route.params.id}`, {
+        const res = await axios.put(`http://localhost:3000/todos/${route.params.id}`, {
           subject: todo.value.subject,
           completed: todo.value.completed,
-        })
+        });
+        originalTodo.value = {...res.data};
         router.push({
           name:'Todos',
         });
@@ -85,6 +96,7 @@ export default {
       toggleTodoStatus,
       moveToTodoListPage,
       updateTodo,
+      todoUpdated,
     }
   }
 }
