@@ -41,44 +41,22 @@
  이 속성에는 css 선택자 또는 실제 DOM 객체가 올 수 있다.
  -->
   <teleport to='#modal'>
-    <Modal
+    <DeleteModal
       v-if="showModal"
       @close="closeModal"
       @delete='handleTodoDelete'
-    >
-      <template v-slot:title>
-        Delete Todo
-      </template>
-
-      <template v-slot:body>
-        Todo를 정말 삭제하시겠습니까?
-      </template>
-      <template v-slot:footer>
-        <button
-          type="button"
-          class="btn btn-secondary"
-          @click="onClose"
-        >
-          Close
-        </button>
-        <button
-          type="button"
-          class="btn btn-danger"
-          @click='onDelete'
-        >Delete</button>
-      </template>
-    </Modal>
+    />
   </teleport>
 </template>
 <script>
 import { useRouter} from 'vue-router';
-import Modal from '@/components/Modal.vue';
 import { ref } from 'vue';
+import DeleteModal from '@/components/DeleteModal.vue';
 // props 주의할 점, props는 단방향 바인딩 (부모 -> 자식)이므로,
 // 자식 컴포넌트에서 부모 컴포넌트가 가진 데이터를 변경하면 안된다.
 export default {
   components: {
-    Modal
+    DeleteModal,
   },
   // 부모 컴포넌트가 보낸 데이터 꺼내기
   // props: ['todos'], 이런 형식도 가능
