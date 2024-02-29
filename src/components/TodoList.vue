@@ -45,7 +45,29 @@
       v-if="showModal"
       @close="closeModal"
       @delete='handleTodoDelete'
-    />
+    >
+      <template v-slot:title>
+        Delete Todo
+      </template>
+
+      <template v-slot:body>
+        Todo를 정말 삭제하시겠습니까?
+      </template>
+      <template v-slot:footer>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          @click="onClose"
+        >
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          @click='onDelete'
+        >Delete</button>
+      </template>
+    </Modal>
   </teleport>
 </template>
 <script>
