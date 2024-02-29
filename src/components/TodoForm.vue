@@ -41,7 +41,9 @@
     <button type='submit' class='btn btn-primary mt-2' @click='saveTodo' :disabled='todoUpdated'>{{editing?"Update":"Create"}}</button>
     <button class='btn btn-outline-dark ml-2 mt-2' @click='moveToTodoListPage'>Cancle</button>
   </form>
-  <Toast v-if='showToast' :message='toastMessage' :type='toastAlertType'/>
+  <transition name="fade">
+    <Toast v-if='showToast' :message='toastMessage' :type='toastAlertType'/>
+  </transition>
 </template>
 <script>
 import {useRoute, useRouter} from 'vue-router';
@@ -177,14 +179,21 @@ export default {
   }
 }
 </script>
-<style scoped>
 // scoped 키워드는 현재 컴포넌트에만 영역을 제한하는 키워드
 // scoped가 없는 경우, 해당 컴포넌트 뿐만 아니라 모든 컴포넌트에서 아래 .text-red의 스타일을 사용할 수 있다.
+<style>
   .text-red{
     color:red;
   }
-</style>
-<!--스타일을 한개 이상 정의할 수 있다. scoped와 unscoped-->
-<style>
-
+.fade-enter-active, .fade-leave-active{
+  transition:all 0.5s ease;
+}
+.fade-enter-from, .fade-leave-to{
+  opacity: 0;
+  transform:translateY(-30px);
+}
+.fade-enter-to, .fade-leave-from{
+  opacity: 1;
+  transform:translateY(0px);
+}
 </style>
