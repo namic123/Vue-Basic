@@ -34,6 +34,7 @@
   <Modal
     v-if="showModal"
     @close="closeModal"
+    @delete='handleTodoDelete'
   />
 </template>
 <script>
@@ -66,8 +67,12 @@ export default {
     function handleTodoCompleted(todoIndex, event) {
       emit("handle-todo-complete", todoIndex, event.target.checked);
     }
-    function handleTodoDelete(todoIndex) {
-      emit("handle-todo-delete", todoIndex);
+    function handleTodoDelete() {
+      emit("handle-todo-delete", todoDeleteId.value);
+
+      // delete 후 modal 사라지고, id 초기화
+      showModal.value = false;
+      todoDeleteId.value = null;
     }
     const openModal = (id) => {
       todoDeleteId.value = id;
