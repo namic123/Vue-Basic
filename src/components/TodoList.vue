@@ -31,11 +31,22 @@
       </div>
     </div>
   </div>
-  <Modal
-    v-if="showModal"
-    @close="closeModal"
-    @delete='handleTodoDelete'
-  />
+<!-- Vue3의 새로운 기능 Teleport
+ teleport는 컴포넌트를 현재 위치에서 다른 위치로 이동시킬 때 사용,
+ 이 기능은 모달, 알림 또는 어떤 팝업을 화면의 다른 부분으로 이동시키고자 할 때 유용
+ 이는 DOM 구조상 부모- 자식 관계에 구속되지 않고 더 높은 z-index레벨을 가진 요소들 위에
+ 렌더링 되어야 하는 UI 요소들을 쉽게 관리할 수 있게 해준다.
+
+ Teleport 컴포넌트는 to 속성을 사용해서 컨텐츠를 이동시킬 대상 위치를 지정한다.
+ 이 속성에는 css 선택자 또는 실제 DOM 객체가 올 수 있다.
+ -->
+  <teleport to='#modal'>
+    <Modal
+      v-if="showModal"
+      @close="closeModal"
+      @delete='handleTodoDelete'
+    />
+  </teleport>
 </template>
 <script>
 import { useRouter} from 'vue-router';
