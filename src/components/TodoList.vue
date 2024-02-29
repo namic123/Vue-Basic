@@ -9,17 +9,17 @@
       style='cursor:pointer'
       @click='moveToPage(todoItem.id)'
     >
-      <div class="form-check flex-grow-1">
+      <div class="flex-grow-1">
         <input
-          class="form-check-input"
+          class='ml-2 mr-2'
           type="checkbox"
           :checked="todoItem.completed"
           @click.stop="handleTodoCompleted(todoIndex, $event)"
         />
         <!-- 해당 todo가 completed true일때만 스타일 적용 -->
-        <label class="form-check-label" :class="{todo: todoItem.completed}"
+        <span :class="{todo: todoItem.completed}"
           >{{ todoItem.subject }}
-        </label>
+        </span>
       </div>
       <div>
         <button
