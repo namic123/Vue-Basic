@@ -24,19 +24,28 @@
       <div>
         <button
           class="btn btn-danger btn-sm"
-          @click.stop="handleTodoDelete(todoIndex)"
+          @click.stop="openModal(todoItem.id)"
         >
           Delete
         </button>
       </div>
     </div>
   </div>
+  <Modal
+    v-if="showModal"
+    @close="closeModal"
+  />
 </template>
 <script>
 import { useRouter} from 'vue-router';
+import Modal from '@/components/Modal.vue';
+import { ref } from 'vue';
 // props 주의할 점, props는 단방향 바인딩 (부모 -> 자식)이므로,
 // 자식 컴포넌트에서 부모 컴포넌트가 가진 데이터를 변경하면 안된다.
 export default {
+  components: {
+    Modal
+  },
   // 부모 컴포넌트가 보낸 데이터 꺼내기
   // props: ['todos'], 이런 형식도 가능
   props: {
@@ -50,6 +59,8 @@ export default {
   // 장점 : context.emit의 중복을 피함, emit하는 이벤트를 한 눈에 볼 수 있으므로, 가독성 증가.
   emits: ["handle-todo-complete", "delete-todo"],
   setup(props, {emit}) {
+    const showModal = ref(false);
+    const todoDeleteId = ref(null);
     const router = useRouter();
     // todo 완료 여부
     function handleTodoCompleted(todoIndex, event) {
@@ -58,6 +69,14 @@ export default {
     function handleTodoDelete(todoIndex) {
       emit("handle-todo-delete", todoIndex);
     }
+    const openModal = (id) => {
+      todoDeleteId.value = id;
+      showModal.value = true;
+    };
+    const closeModal = () => {
+      todoDeleteId.value = null;
+      showModal.value = false;
+    };
     const moveToPage = (todoId) => {
       console.log(todoId);
       // push한 url로 이동시킴
@@ -74,7 +93,10 @@ export default {
     return {
       handleTodoCompleted,
       handleTodoDelete,
-      moveToPage
+      moveToPage,
+      showModal,
+      openModal,
+      closeModal,
     };
 
   },

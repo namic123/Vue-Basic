@@ -181,7 +181,7 @@ export default {
 </script>
 // scoped 키워드는 현재 컴포넌트에만 영역을 제한하는 키워드
 // scoped가 없는 경우, 해당 컴포넌트 뿐만 아니라 모든 컴포넌트에서 아래 .text-red의 스타일을 사용할 수 있다.
-<style>
+<style scoped>
   .text-red{
     color:red;
   }
