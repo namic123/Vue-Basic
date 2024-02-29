@@ -1,36 +1,43 @@
 <template>
-  <div
-    v-for="(todoItem, todoIndex) in todos"
-    :key="todoItem.id"
-    class="card mt-2"
-  >
-    <div
-      class="card-body p-2 d-flex align-items-center"
-      style='cursor:pointer'
-      @click='moveToPage(todoItem.id)'
+<!--  <div-->
+<!--    v-for="(todoItem, todoIndex) in todos"-->
+<!--    :key="todoItem.id"-->
+<!--    class="card mt-2"-->
+<!--  >-->
+    <List
+      :items='todos'
     >
-      <div class="flex-grow-1">
-        <input
-          class='ml-2 mr-2'
-          type="checkbox"
-          :checked="todoItem.completed"
-          @click.stop="handleTodoCompleted(todoIndex, $event)"
-        />
-        <!-- 해당 todo가 completed true일때만 스타일 적용 -->
-        <span :class="{todo: todoItem.completed}"
-          >{{ todoItem.subject }}
-        </span>
-      </div>
-      <div>
-        <button
-          class="btn btn-danger btn-sm"
-          @click.stop="openModal(todoItem.id)"
+<!-- <template #default='slotProps'> 객체 형태로 props를 보내므로, 구조 분해 할당으로 아래와 같이 사용할 수 있음-->
+      <template #default='{item, index}'>
+        <div
+          class="card-body p-2 d-flex align-items-center"
+          style='cursor:pointer'
+          @click='moveToPage(item.id)'
         >
-          Delete
-        </button>
-      </div>
-    </div>
-  </div>
+          <div class="flex-grow-1">
+            <input
+              class='ml-2 mr-2'
+              type="checkbox"
+              :checked="item.completed"
+              @click.stop="handleTodoCompleted(index, $event)"
+            />
+            <!-- 해당 todo가 completed true일때만 스타일 적용 -->
+            <span :class="{todo: item.completed}"
+              >{{ item.subject }}
+            </span>
+          </div>
+          <div>
+            <button
+              class="btn btn-danger btn-sm"
+              @click.stop="openModal(item.id)"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </template>
+    </List>
+<!--  </div>-->
 <!-- Vue3의 새로운 기능 Teleport
  teleport는 컴포넌트를 현재 위치에서 다른 위치로 이동시킬 때 사용,
  이 기능은 모달, 알림 또는 어떤 팝업을 화면의 다른 부분으로 이동시키고자 할 때 유용
@@ -52,11 +59,13 @@
 import { useRouter} from 'vue-router';
 import { ref } from 'vue';
 import DeleteModal from '@/components/DeleteModal.vue';
+import List from '@/components/List.vue';
 // props 주의할 점, props는 단방향 바인딩 (부모 -> 자식)이므로,
 // 자식 컴포넌트에서 부모 컴포넌트가 가진 데이터를 변경하면 안된다.
 export default {
   components: {
     DeleteModal,
+    List,
   },
   // 부모 컴포넌트가 보낸 데이터 꺼내기
   // props: ['todos'], 이런 형식도 가능
