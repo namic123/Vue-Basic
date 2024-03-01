@@ -6,13 +6,23 @@
   <form v-else @submit.prevent='saveTodo'>
     <div class='row'>
       <div class='col-6'>
-        <div class="form-group">
-          <label>Subject</label>
-          <input type='text' class='form-control' v-model='todo.subject'>
-          <div v-if='subjectError' style='color:red'>
-            {{subjectError}}
-          </div>
-        </div>
+<!--        <div class="form-group">-->
+<!--          <label>Subject</label>-->
+<!--          <input type='text' class='form-control' v-model='todo.subject'>-->
+<!--          <div v-if='subjectError' style='color:red'>-->
+<!--            {{subjectError}}-->
+<!--          </div>-->
+<!--        </div>-->
+        <!--label 단순 String 전달
+            subject와 error는 ref이므로 데이터 바인딩을 위한 ":" -->
+        <Input
+          label='Subject'
+          :subject='todo.subject'
+          :error='subjectError'
+          @update-subject='updateTodoSubject'
+        >
+
+        </Input>
       </div>
       <div class='col-6' v-if='editing'>
         <div class="form-group">
@@ -52,10 +62,12 @@ import {computed, ref} from 'vue';
 import _ from 'lodash'; // Lodash는 기본적으로 인포트 할때 언더스코어(_)를 사용
 import Toast from '@/components/Toast.vue'
 import {useToast} from '@/composables/toast';
+import Input from "@/components/Input.vue"
 
 export default {
   components :{
-    Toast
+    Toast,
+    Input
   },
   // Todo 생성페이지에서는 todo의 정보를 불러올 필요가 없기 때문에, 생성과 수정 구분을 위한 props.
   props:{
@@ -82,6 +94,10 @@ export default {
       showToast,
       triggerToast,
     } = useToast();
+
+    function updateTodoSubject(newValueOfSubject){
+      todo.value.subject = newValueOfSubject;
+    }
 
     // 현재 라우트 객체에 접근하고 싶을 때, useRoute를 사용하여 그 정보를 얻을 수 있다.
     // 라우트 파라미터 접근: URL의 동적 세그먼트 (예: /todos/:id)에 접근할 때 사용한다.
@@ -175,6 +191,7 @@ export default {
       toastMessage,
       toastAlertType,
       subjectError,
+      updateTodoSubject,
     }
   }
 }
