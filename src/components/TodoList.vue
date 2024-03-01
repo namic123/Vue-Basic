@@ -57,7 +57,7 @@
 </template>
 <script>
 import { useRouter} from 'vue-router';
-import {ref, useContext} from 'vue';
+import {ref, getCurrentInstance } from 'vue';
 import DeleteModal from '@/components/DeleteModal.vue';
 import List from '@/components/List.vue';
 // props 주의할 점, props는 단방향 바인딩 (부모 -> 자식)이므로,
@@ -80,7 +80,7 @@ export default {
   // 장점 : context.emit의 중복을 피함, emit하는 이벤트를 한 눈에 볼 수 있으므로, 가독성 증가.
   emits: ["handle-todo-complete", "delete-todo"],
   setup() {
-    const {emit}= useContext();
+    const {emit}= getCurrentInstance();
     const showModal = ref(false);
     const todoDeleteId = ref(null);
     const router = useRouter();

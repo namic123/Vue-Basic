@@ -1,6 +1,6 @@
 <template>
   <div>Home Page</div>
-  <div>{count}</div>
+  <div>{{count}}</div>
   <button @click='count++'>Add</button>
 </template>
 <script>

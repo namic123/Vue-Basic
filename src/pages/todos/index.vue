@@ -44,7 +44,7 @@ import {ref} from 'vue';
 import TodoList from "@/components/TodoList.vue";
 import TodoPagination from "@/components/TodoPagination.vue";
 import Toast from '@/components/Toast.vue';
-import axios from "axios";
+import axios from '@/axios';
 import {useToast} from '@/composables/toast';
 import {useRouter} from 'vue-router';
 
@@ -80,7 +80,7 @@ export default {
       error.value = "";
       const id = todos.value[index].id;
       try {
-        await axios.patch("http://localhost:3000/todos/" + id, {
+        await axios.patch("todos/" + id, {
           completed: checked,
         });
         todos.value[index].completed = checked;
@@ -94,7 +94,7 @@ export default {
     async function deleteTodo(id) {
       error.value = "";
       try {
-        await axios.delete("http://localhost:3000/todos/" + id);
+        await axios.delete("todos/" + id);
 
         if(getTodoRef.value){
           getTodoRef.value.getTodos(1);
@@ -112,7 +112,7 @@ export default {
       error.value = "";
       try {
         // await 키워드가 선언되었으므로, axios요청이 끝날 때까지 다음 코드가 실행되지 않는다.
-        await axios.post("http://localhost:3000/todos", {
+        await axios.post("todos", {
           subject: todo.subject,
           completed: todo.completed,
         });

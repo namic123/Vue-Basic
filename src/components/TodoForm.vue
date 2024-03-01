@@ -58,8 +58,8 @@
 </template>
 <script>
 import {useRoute, useRouter} from 'vue-router';
-import axios from 'axios';
-import {computed, ref, onUpdated} from 'vue';
+import axios from '@/axios';
+import {computed, ref} from 'vue';
 import _ from 'lodash'; // Lodash는 기본적으로 인포트 할때 언더스코어(_)를 사용
 import Toast from '@/components/Toast.vue'
 import {useToast} from '@/composables/toast';
@@ -106,7 +106,7 @@ export default {
     const getTodo = async () => {
       loading.value = true;
       try{
-        const res = await axios.get('http://localhost:3000/todos/'+ route.params.id);
+        const res = await axios.get('todos/'+ route.params.id);
         todo.value = {...res.data}; // 객체의 주소를 할당하는 것이 아닌 데이터 그 자체를 복사
         originalTodo.value = {...res.data};
         loading.value = false;
@@ -160,12 +160,12 @@ export default {
         // 페이지 별 요청
         // 수정 페이지인 경우
         if(props.editing) {
-            res = await axios.put(`http://localhost:3000/todos/${route.params.id}`, data);
+            res = await axios.put(`todos/${route.params.id}`, data);
             originalTodo.value = {...res.data};
         }
         // 생성 페이지인 경우
         else {
-            res = await axios.post(`http://localhost:3000/todos`, data);
+            res = await axios.post('todos', data);
             // 새로운 todo 작성할 수 있도록 초기화
             todo.value.subject = "";
             todo.value.body = "";
