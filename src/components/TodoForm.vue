@@ -173,6 +173,11 @@ export default {
         // 페이지 별 토스트 메세지
         const message = 'Todo가 성공적으로' + props.editing ? "업데이트 되었습니다!":"추가 되었습니다!";
         triggerToast(message, "success");
+        if(!props.editing){
+          router.push({
+            name:'Todos'
+          });
+        }
       }catch(error){
         console.log(error);
         triggerToast("오류가 발생했습니다!", "danger");
