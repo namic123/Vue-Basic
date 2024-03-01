@@ -13,6 +13,7 @@
   </div>
 </template>
 <script >
+import {useContext} from 'vue';
 export default {
   props: {
     label:{
@@ -28,7 +29,8 @@ export default {
       required:true,
     },
   },
-  setup (props,{emit}) {
+  setup() {
+    const {emit} = useContext();
     // Subject의 업데이트 값을 부모 컴포넌트에서 요청할 수 있게 emit
     const onInput = (e) =>{
       emit('update:subject', e.target.value);
