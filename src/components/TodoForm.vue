@@ -17,9 +17,8 @@
             subject와 error는 ref이므로 데이터 바인딩을 위한 ":" -->
         <Input
           label='Subject'
-          :subject='todo.subject'
+          v-model:subject='todo.subject'
           :error='subjectError'
-          @update-subject='updateTodoSubject'
         >
 
         </Input>
@@ -94,10 +93,6 @@ export default {
       showToast,
       triggerToast,
     } = useToast();
-
-    function updateTodoSubject(newValueOfSubject){
-      todo.value.subject = newValueOfSubject;
-    }
 
     // 현재 라우트 객체에 접근하고 싶을 때, useRoute를 사용하여 그 정보를 얻을 수 있다.
     // 라우트 파라미터 접근: URL의 동적 세그먼트 (예: /todos/:id)에 접근할 때 사용한다.
@@ -191,7 +186,6 @@ export default {
       toastMessage,
       toastAlertType,
       subjectError,
-      updateTodoSubject,
     }
   }
 }

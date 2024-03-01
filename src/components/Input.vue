@@ -31,7 +31,7 @@ export default {
   setup (props,{emit}) {
     // Subject의 업데이트 값을 부모 컴포넌트에서 요청할 수 있게 emit
     const onInput = (e) =>{
-      emit('update-subject', e.target.value);
+      emit('update:subject', e.target.value);
     }
     return{
       onInput,
