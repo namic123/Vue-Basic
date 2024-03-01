@@ -52,22 +52,17 @@
     <button type='submit' class='btn btn-primary mt-2' @click='saveTodo' :disabled='todoUpdated'>{{editing?"Update":"Create"}}</button>
     <button class='btn btn-outline-dark ml-2 mt-2' @click='moveToTodoListPage'>Cancle</button>
   </form>
-  <transition name="fade">
-    <Toast v-if='showToast' :message='toastMessage' :type='toastAlertType'/>
-  </transition>
 </template>
 <script>
 import {useRoute, useRouter} from 'vue-router';
 import axios from '@/axios';
 import {computed, ref} from 'vue';
 import _ from 'lodash'; // Lodash는 기본적으로 인포트 할때 언더스코어(_)를 사용
-import Toast from '@/components/Toast.vue'
 import {useToast} from '@/composables/toast';
 import Input from "@/components/Input.vue"
 
 export default {
   components :{
-    Toast,
     Input
   },
   // Todo 생성페이지에서는 todo의 정보를 불러올 필요가 없기 때문에, 생성과 수정 구분을 위한 props.
@@ -204,15 +199,4 @@ export default {
   .text-red{
     color:red;
   }
-.fade-enter-active, .fade-leave-active{
-  transition:all 0.5s ease;
-}
-.fade-enter-from, .fade-leave-to{
-  opacity: 0;
-  transform:translateY(-30px);
-}
-.fade-enter-to, .fade-leave-from{
-  opacity: 1;
-  transform:translateY(0px);
-}
 </style>

@@ -3,20 +3,11 @@ import {useStore} from 'vuex';
 
 export function useToast(){
   const store = useStore();
-  const showToast = computed(()=> store.state.showToast);
-  const toastMessage = computed(()=>store.getters.toastMessageWithSmile);
-  const toastAlertType = computed(()=>store.state.toastAlertType);
-  const timeout = computed(()=>store.state.timeout);
+  const showToast = computed(()=> store.state.toast.showToast);
+  const toastMessage = computed(()=>store.getters['toast/toastMessageWithSmile']);
+  const toastAlertType = computed(()=>store.state.toast.toastAlertType);
   function triggerToast(message, type='success'){
-    // toastMessage.value = message;
-    // toastAlertType.value = type;
-    // showToast.value = true;
-    // timeout.value = setTimeout(()=>{
-    //   toastMessage.value = "";
-    //   toastAlertType.value = "";
-    //   showToast.value = false;
-    // },3000);
-    store.dispatch('triggerToast', message, type);
+    store.dispatch('toast/triggerToast', message, type);
   }
 
 

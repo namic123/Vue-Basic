@@ -36,14 +36,12 @@
       ref='getTodoRef'
     />
   </div>
-  <Toast v-if='showToast' :message='toastMessage' :type='toastAlertType'/>
 </template>
 <script>
 import {ref} from 'vue';
 // 다른 컴포넌트 import
 import TodoList from "@/components/TodoList.vue";
 import TodoPagination from "@/components/TodoPagination.vue";
-import Toast from '@/components/Toast.vue';
 import axios from '@/axios';
 import {useToast} from '@/composables/toast';
 import {useRouter} from 'vue-router';
@@ -53,7 +51,6 @@ export default {
   components: {
     TodoList,
     TodoPagination,
-    Toast,
   },
   setup() {
     // field
