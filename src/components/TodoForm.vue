@@ -83,11 +83,7 @@ export default {
       completed:false,
       body:'',
     });
-    // v-model: 양방향 바인딩을 사용했을 때, todo Subject가 정상적으로 업데이트 되는지
-    // 라이프 사이클 onUpdated(reactive state 업데이트 후)로 콘솔 찍기
-    onUpdated(()=>{
-      console.log(todo.value.subject);
-    })
+
     const originalTodo = ref(null);
     const loading = ref(false);
     const subjectError = ref("");
