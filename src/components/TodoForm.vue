@@ -14,7 +14,9 @@
 <!--          </div>-->
 <!--        </div>-->
         <!--label 단순 String 전달
-            subject와 error는 ref이므로 데이터 바인딩을 위한 ":" -->
+            subject와 error는 ref이므로 데이터 바인딩을 위한 ":"
+            공홈 기준(Multiple v-model bindings) 참고-->
+
         <Input
           label='Subject'
           v-model:subject='todo.subject'
@@ -57,7 +59,7 @@
 <script>
 import {useRoute, useRouter} from 'vue-router';
 import axios from 'axios';
-import {computed, ref} from 'vue';
+import {computed, ref, onUpdated} from 'vue';
 import _ from 'lodash'; // Lodash는 기본적으로 인포트 할때 언더스코어(_)를 사용
 import Toast from '@/components/Toast.vue'
 import {useToast} from '@/composables/toast';
@@ -81,6 +83,11 @@ export default {
       completed:false,
       body:'',
     });
+    // v-model: 양방향 바인딩을 사용했을 때, todo Subject가 정상적으로 업데이트 되는지
+    // 라이프 사이클 onUpdated(reactive state 업데이트 후)로 콘솔 찍기
+    onUpdated(()=>{
+      console.log(todo.value.subject);
+    })
     const originalTodo = ref(null);
     const loading = ref(false);
     const subjectError = ref("");
