@@ -21,11 +21,16 @@
 <script>
 import Toast from '@/components/Toast.vue';
 import {useToast} from '@/composables/toast';
+import {useStore} from 'vuex';
+
 export default {
   components:{
     Toast
   },
   setup(){
+    const store = useStore();
+    // store의 props 콜솔
+    console.log(store.state.showToast);
     const {
       toastMessage,
       toastAlertType,

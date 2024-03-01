@@ -1,7 +1,11 @@
 import {createStore} from 'vuex';
+import {ref} from 'vue';
 
 export default createStore({
   state:{
-  // Vue의 컴포넌트 staterk emfdjrka
+     showToast = false,
+     toastMessage = '',
+     toastAlertType = '',
+     timeout = null,
   },
 });
